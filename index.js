@@ -1,5 +1,6 @@
 var five = require("johnny-five");
 var keypress = require("keypress");
+var ZumoController = require("./zumoController");
 var board = new five.Board({
 	//port: "/dev/cu.usbserial-DA00SPHK"
 });
@@ -12,18 +13,30 @@ board.on("ready", function() {
   var motor1 = new five.Motor(configs.M1);
   var motor2 = new five.Motor(configs.M2);
 
+  var motors = {
+    leftMotor: motor1,
+    rightMotor: motor2
+  }
+
+  var speed = 255;
+  var angleSpeed = 50;
+
+  var zumoContoller = new ZumoController(motors, speed, angleSpeed);
 
   function controller(ch,key) {
 
-  	if(key.name === "up") {
-  		motor1.forward(100);
-      motor2.forward(100);  
-  	} else if(key.name === "down") {
-  		motor1.reverse(100);
-      motor2.reverse(100);
-  	} else {
-  		motor1.stop();
-  		motor2.stop();
+    if(key) {
+      if(key.name === "z") {
+        zumoContoller.goBackward();  
+      } else if(key.name === "s") {
+        zumoContoller.goForward();
+      } else if(key.name === "q") {
+        zumoContoller.turnLeftForward();
+      } else if(key.name === "d") {
+        zumoContoller.turnRightForward();
+      }  
+    } else {
+  		zumoContoller.stop();
   	}
   }
 
