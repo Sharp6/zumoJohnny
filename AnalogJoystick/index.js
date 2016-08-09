@@ -50,6 +50,7 @@ var AnalogJoystick = function(driver) {
 	}.bind(this);
 
 	driver.on("move", function(val, axis) {
+		console.log("AJ", val, axis);
 		this.rawPosition[axis] = val;
 
 		updateExtremes(val,axis);
@@ -59,6 +60,7 @@ var AnalogJoystick = function(driver) {
 	}.bind(this));
 
 	driver.on("fireButton", function(state) {
+		console.log("AJ FIRE", state);
 		this.emit("fireButton", state);
 	}.bind(this));
 
