@@ -1,6 +1,6 @@
 var NunchukJoystick = function(board, five) {
 	this.joystick = new five.Wii.Nunchuk({ board: board, freq: 50 });
-	this.fireButton = "CONFIG ME";
+	this.fireButton = "z";
 
 	nunchuk.joystick.on("change", function(event) {
 		this.emit("move", event.target[event.axis], event.axis);
