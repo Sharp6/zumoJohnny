@@ -3,16 +3,7 @@ var NunchukJoystick = function(board, five) {
 	this.fireButton = "z";
 
 	this.joystick.joystick.on("change", function(event) {
-		console.log("move", event.target[event.axis], event.axis);
 		this.emit("move", event.target[event.axis], event.axis);
-
-		/*
-    console.log(
-      "joystick " + event.axis,
-      event.target[event.axis],
-      event.axis, event.direction
-    );
-		*/
   }.bind(this));
 
 	this.joystick.on("down", function(event) {
