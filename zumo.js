@@ -1,34 +1,29 @@
-
 var five = require("johnny-five");
 
 var ZumoDriver = require("./zumoDriver");
 var AtariJoystick = require("./AtariJoystick");
 var Ps3Joystick = require("./ps3Joystick");
+var NunchukJoystick = require('./nunchukJoystick');
 
-var board = new five.Board();
+// CONFIG PART
+var ports = [
+  { id: "zumoBoard", port: "" },
+  { id: "nunchukBoard", port: "" }
+];
 
-board.on("ready", function() {
-	console.log("Board is ready.");
-	var zumo = zumoInit();
-	//var joystick = new AtariJoystick(zumo);
-	var joystick = new Ps3Joystick(zumo);
+var zumo;
+var nunchukJoystick;
 
-	zumo.buzz();
+new five.Boards(ports).on("ready", function() {
+  console.log("Boards are ready");
+
+  this.each(function(board) {
+    if(board.id === "zumoBoard") {
+      zumo = new ZumoBot(board, five);
+    } else if (board.id === "nunchukBoard") {
+      nunchukJoystick = new NunchukJoystick(board, robot, five);
+    }
+  });
+
+  zumo.buzz();
 });
-
-function zumoInit() {
-	var configs = five.Motor.SHIELD_CONFIGS.POLOLU_DRV8835_SHIELD;
-
-  var motor1 = new five.Motor(configs.M1);
-  var motor2 = new five.Motor(configs.M2);
-
-  var laser = new five.Led(4);
-
-  var buzzer = new five.Piezo(3);
-
-  var motors = {
-    leftMotor: motor1,
-    rightMotor: motor2
-  }
-  return new ZumoDriver({ motors: motors, laser: laser, buzzer: buzzer });
-}

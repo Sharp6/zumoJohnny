@@ -49,7 +49,6 @@ var Ps3Joystick = function(zumo) {
 
 		zumo.leftDirect(leftMotorSpeed);
 		zumo.rightDirect(rightMotorSpeed);
-
 	}
 }
 
