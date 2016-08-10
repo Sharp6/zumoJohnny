@@ -32,7 +32,7 @@ function initBoards() {
       console.log("Got boardType", boardType);
 
       if(boardType === "zumo") {
-        robot = new ZumoBot(board, joystick, five);
+        robot = new ZumoBot(board, five);
       } else if (boardType === "nunchuk") {
         joystick = new AnalogJoystick(new NunchukJoystick(board, five));
       }
@@ -41,6 +41,7 @@ function initBoards() {
     new five.Boards(config.ports).on("ready", function() {
       console.log("Boards are ready");
       this.each(assignBoard);
+      mapAnalogToZumo(robot, joystick);
       robot.buzz();
       resolve();
     });
@@ -78,5 +79,14 @@ function mapAnalogToZumo(zumo, analogJoystick) {
 
     zumo.leftDirect(leftMotorSpeed);
     zumo.rightDirect(rightMotorSpeed);
+  });
+
+  joystick.on("fireButton", function(state) {
+    if(state === "on") {
+      zumo.fire();
+    } else {
+      zumo.holdFire();
+    }
+
   });
 }
