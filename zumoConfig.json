@@ -1,0 +1,12 @@
+{
+	"ports": [
+		{
+			"id": "zumoBoard", 
+			"port": ""
+		},
+		{
+			"id": "nunchukBoard", 
+			"port": ""
+		}
+	] 
+}

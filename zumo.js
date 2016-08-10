@@ -1,29 +1,55 @@
+var fs = require('fs');
+
 var five = require("johnny-five");
 
+var MonitorServer = require('./MonitorServer');
 var ZumoDriver = require("./zumoDriver");
 var AtariJoystick = require("./AtariJoystick");
 var Ps3Joystick = require("./ps3Joystick");
 var NunchukJoystick = require('./nunchukJoystick');
+var AnalogJoystick = require("./AnalogJoystick");
 
-// CONFIG PART
-var ports = [
-  { id: "zumoBoard", port: "" },
-  { id: "nunchukBoard", port: "" }
-];
+var config = JSON.parse(fs.readFileSync('./zumoConfig.json').toString());
 
-var zumo;
-var nunchukJoystick;
+var robot;
+var joystick;
 
-new five.Boards(ports).on("ready", function() {
-  console.log("Boards are ready");
+var monitor;
 
-  this.each(function(board) {
-    if(board.id === "zumoBoard") {
-      zumo = new ZumoBot(board, five);
-    } else if (board.id === "nunchukBoard") {
-      nunchukJoystick = new NunchukJoystick(board, robot, five);
-    }
+initBoards()
+  .then(initMonitor)
+  .then(function() {
+    console.log("Init all done!");
+  })
+  .catch(function(err) {
+    console.log("Sadly, an error has occurred", err);
   });
 
-  zumo.buzz();
-});
+function initBoards() {
+  return new Promise(function(resolve,reject) {
+    function assignBoard(board) {
+      var boardType = board.id.substr(0, board.id.indexOf("Board"));
+      console.log("Got boardType", boardType);
+
+      if(boardType === "zumo") {
+        zumo = new ZumoBot(board, five);
+      } else if (boardType === "nunchuk") {
+        joystick = new AnalogJoystick(new NunchukJoystick(board, five));
+      }
+    }
+
+    new five.Boards(config.ports).on("ready", function() {
+      console.log("Boards are ready");
+      this.each(assignBoard);
+      robot.buzz();
+      resolve();
+    });
+  });
+}
+
+function initMonitor() {
+  return new Promise(function(resolve,reject) {
+    monitor = new MonitorServer();
+    resolve();
+  });
+}

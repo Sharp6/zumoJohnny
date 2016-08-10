@@ -24,6 +24,8 @@ var monitorServer = function(joystick) {
 	http.listen(1804, function(){
 		console.log('listening on *:1804');
 	});
+
+	return app;
 };
 
 module.exports = monitorServer;
