@@ -1,6 +1,6 @@
 var ZumoDriver = require('./../zumoDriver');
 
-var ZumoBot = function(board, five) {
+var ZumoBot = function(board, joystick, five) {
 	var configs = five.Motor.SHIELD_CONFIGS.POLOLU_DRV8835_SHIELD;
 
 	[configs.M1, configs.M2].forEach(function(configObj) {

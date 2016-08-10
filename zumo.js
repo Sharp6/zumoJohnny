@@ -32,7 +32,7 @@ function initBoards() {
       console.log("Got boardType", boardType);
 
       if(boardType === "zumo") {
-        zumo = new ZumoBot(board, five);
+        robot = new ZumoBot(board, joystick, five);
       } else if (boardType === "nunchuk") {
         joystick = new AnalogJoystick(new NunchukJoystick(board, five));
       }
@@ -51,5 +51,32 @@ function initMonitor() {
   return new Promise(function(resolve,reject) {
     monitor = new MonitorServer();
     resolve();
+  });
+}
+
+function mapAnalogToZumo(zumo, analogJoystick) {
+  joystick.on("stickMove", function() {
+    var leftMotorSpeed, rightMotorSpeed;
+
+    leftMotorSpeed = rightMotorSpeed = analogJoystick.normalizedPosition.y;
+    leftMotorSpeed += analogJoystick.normalizedPosition.x;
+    rightMotorSpeed -= analogJoystick.normalizedPosition.x;
+
+    // This should never happen
+    if (leftMotorSpeed > 255) {
+      leftMotorSpeed = 255;
+    } else if (leftMotorSpeed < -255) {
+      leftMotorSpeed = -255;
+    }
+
+    // This should never happen
+    if (rightMotorSpeed > 255) {
+      rightMotorSpeed = 255;
+    } else if (rightMotorSpeed < -255) {
+      rightMotorSpeed = -255;
+    }
+
+    zumo.leftDirect(leftMotorSpeed);
+    zumo.rightDirect(rightMotorSpeed);
   });
 }
