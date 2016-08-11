@@ -53,7 +53,7 @@ function initBoards() {
 
 function initMonitor() {
   return new Promise(function(resolve,reject) {
-    monitor = new MonitorServer();
+    monitor = new MonitorServer(joystick);
     resolve();
   });
 }
