@@ -1,7 +1,7 @@
 var NunchukJoystick = function(board, five) {
 	console.log("Hello, I'm Nunchuk, and I've got board", board.port);
 
-	this.joystick = new five.Wii.Nunchuk({freq: 50 });
+	this.joystick = new five.Wii.Nunchuk({freq: 50, board: board });
 	this.fireButton = "z";
 
 	this.joystick.joystick.on("change", function(event) {
