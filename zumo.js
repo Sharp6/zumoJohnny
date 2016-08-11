@@ -41,8 +41,10 @@ function initBoards() {
     new five.Boards(config.ports).on("ready", function() {
       console.log("Boards are ready");
       this.each(assignBoard);
-      mapAnalogToZumo(robot, joystick);
-      robot.buzz();
+      if(robot && joystick) {
+        mapAnalogToZumo(robot, joystick);
+        robot.buzz();
+      }
       resolve();
     });
   });

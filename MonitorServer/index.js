@@ -17,6 +17,8 @@ var monitorServer = function(joystick) {
 		res.sendFile(__dirname +'/index.html');
 	});
 
+	app.use(express.static(path.join(__dirname, 'public')));
+
 	io.on('connection', function(socket){
 		console.log('a user connected');
 	});

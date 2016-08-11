@@ -1,7 +1,9 @@
 var monitorServer = function(joystick) {
-	var app = require('express')();
+	var express = require('express');
+	var app = express();
 	var http = require('http').Server(app);
 	var io = require('socket.io')(http);
+	var path = require('path');
 
 	joystick.on("stickMove", function() {
 		io.emit("stickExtremesReport", joystick.extremes);
@@ -12,6 +14,8 @@ var monitorServer = function(joystick) {
 	joystick.on("fireButton", function(state) {
 		io.emit("fireButton", state);
 	});
+
+	app.use(express.static(path.join(__dirname, 'public')));
 	
 	app.get('/', function(req, res) {
 		res.sendFile(__dirname +'/index.html');
