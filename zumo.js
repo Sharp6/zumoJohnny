@@ -62,6 +62,7 @@ function mapAnalogToZumo(zumo, analogJoystick) {
   console.log("Doing the mapping!");
   
   analogJoystick.on("stickMove", function() {
+    console.log("Got a stickmove!");
     var leftMotorSpeed, rightMotorSpeed;
 
     leftMotorSpeed = rightMotorSpeed = analogJoystick.normalizedPosition.y;
