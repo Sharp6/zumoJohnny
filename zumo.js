@@ -4,9 +4,9 @@ var five = require("johnny-five");
 
 var MonitorServer = require('./MonitorServer');
 var ZumoDriver = require("./zumoDriver");
-var AtariJoystick = require("./AtariJoystick");
-var Ps3Joystick = require("./ps3Joystick");
-var NunchukJoystick = require('./nunchukJoystick');
+//var AtariJoystick = require("./AtariJoystick");
+//var Ps3Joystick = require("./ps3Joystick");
+var NunchukJoystick = require('./NunchukJoystick');
 var AnalogJoystick = require("./AnalogJoystick");
 
 var config = JSON.parse(fs.readFileSync('./zumoConfig.json').toString());
