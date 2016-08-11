@@ -3,7 +3,7 @@ var fs = require('fs');
 var five = require("johnny-five");
 
 var MonitorServer = require('./MonitorServer');
-var ZumoDriver = require("./zumoDriver");
+var ZumoBot = require("./zumoBot");
 //var AtariJoystick = require("./AtariJoystick");
 //var Ps3Joystick = require("./ps3Joystick");
 var NunchukJoystick = require('./NunchukJoystick');
