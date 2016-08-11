@@ -3,6 +3,7 @@ var monitorServer = function(joystick) {
 	var http = require('http').Server(app);
 	var io = require('socket.io')(http);
 
+	console.log("joystick wants to be used.");
 	joystick.on("stickMove", function() {
 		io.emit("stickExtremesReport", joystick.extremes);
 		io.emit("normalizedPositionReport", joystick.normalizedPosition);

@@ -35,6 +35,7 @@ function initBoards() {
         robot = new ZumoBot(board, five);
       } else if (boardType === "nunchuk") {
         joystick = new AnalogJoystick(new NunchukJoystick(board, five));
+        console.log("Joystick has been initted.");
       }
     }
 
