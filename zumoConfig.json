@@ -1,6 +1,10 @@
 {
 	"ports": [
 		{
+			"id": "zumoBoard",
+			"port": "/dev/ttyUSB1"
+		},
+		{
 			"id": "nunchukBoard", 
 			"port": "/dev/ttyUSB0"
 		}
