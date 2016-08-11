@@ -59,7 +59,9 @@ function initMonitor() {
 }
 
 function mapAnalogToZumo(zumo, analogJoystick) {
-  joystick.on("stickMove", function() {
+  console.log("Doing the mapping!");
+  
+  analogJoystick.on("stickMove", function() {
     var leftMotorSpeed, rightMotorSpeed;
 
     leftMotorSpeed = rightMotorSpeed = analogJoystick.normalizedPosition.y;
@@ -84,7 +86,7 @@ function mapAnalogToZumo(zumo, analogJoystick) {
     zumo.rightDirect(rightMotorSpeed);
   });
 
-  joystick.on("fireButton", function(state) {
+  analogJoystick.on("fireButton", function(state) {
     if(state === "on") {
       zumo.fire();
     } else {
