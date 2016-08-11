@@ -53,7 +53,7 @@ var AnalogJoystick = function(driver) {
 
 		updateExtremes(val,axis);
 		calculateNormalizedPosition();
-
+		console.log("ANALOG: EMITTING STICKMOVE");
 		this.emit("stickMove");
 	}.bind(this));
 

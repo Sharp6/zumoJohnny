@@ -33,6 +33,7 @@ function initBoards() {
 
       if(boardType === "zumo") {
         robot = new ZumoBot(board, five);
+	console.log("Robot is ready");
       } else if (boardType === "nunchuk") {
         joystick = new AnalogJoystick(new NunchukJoystick(board, five));
         console.log("Joystick has been initted.");
@@ -62,7 +63,7 @@ function mapAnalogToZumo(zumo, analogJoystick) {
   console.log("Doing the mapping!");
   
   analogJoystick.on("stickMove", function() {
-    console.log("Got a stickmove!");
+    console.log("ZUMOMAPPER: Got a stickmove!");
     var leftMotorSpeed, rightMotorSpeed;
 
     leftMotorSpeed = rightMotorSpeed = analogJoystick.normalizedPosition.y;
@@ -83,6 +84,7 @@ function mapAnalogToZumo(zumo, analogJoystick) {
       rightMotorSpeed = -255;
     }
 
+    console.log("Calling the robot with", leftMotorSpeed, rightMotorSpeed);
     zumo.leftDirect(leftMotorSpeed);
     zumo.rightDirect(rightMotorSpeed);
   });

@@ -84,6 +84,7 @@ var ZumoDriver = function(options) {
 	};
 
 	var leftDirect = function(mSpeed) {
+		console.log("ZUMODRIVER: DRIVING LEFT");
 		if(mSpeed > 0) {
 			motors.rightMotor.reverse(mSpeed);
 		} else {
@@ -92,6 +93,7 @@ var ZumoDriver = function(options) {
 	};
 
 	var rightDirect = function(mSpeed) {
+		console.log("ZUMODRIVER: DRIVING RIGHT");
 		if(mSpeed > 0) {
 			motors.leftMotor.reverse(Math.abs(mSpeed));
 		} else {
