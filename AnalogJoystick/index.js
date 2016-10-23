@@ -54,7 +54,11 @@ var AnalogJoystick = function(driver) {
 		updateExtremes(val,axis);
 		calculateNormalizedPosition();
 		console.log("ANALOG: EMITTING STICKMOVE");
-		this.emit("stickMove");
+		this.emit("stickMove", {
+			extremes: this.extremes,
+			normalizedPosition: this.normalizedPosition,
+			rawPosition: this.rawPosition
+		});
 	}.bind(this));
 
 	driver.on("fireButton", function(state) {
