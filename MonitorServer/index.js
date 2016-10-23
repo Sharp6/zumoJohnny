@@ -24,6 +24,9 @@ var monitorServer = function(joystick) {
 
 	io.on('connection', function(socket){
 		console.log('a user connected');
+		socket.on('clientEvent', function(data) {
+			console.log(data);
+		});
 	});
 
 	http.listen(1804, function(){
