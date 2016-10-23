@@ -23,7 +23,7 @@ var monitorServer = function(joysticks) {
 	}
 
 	function removeListenersOf(joystick) {
-		joystick.removeListener("stickMove", moveCallback);
+		joystick.removeListener("stickMove", moveCallback.bind(joystick));
 		joystick.removeListener("fireButton", buttonCallback);
 	}
 	
