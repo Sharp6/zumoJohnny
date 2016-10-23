@@ -17,6 +17,7 @@ var joystick;
 var monitor;
 
 initBoards()
+  //.then(performMapping)
   .then(initMonitor)
   .then(function() {
     console.log("Init all done!");
@@ -33,7 +34,7 @@ function initBoards() {
 
       if(boardType === "zumo") {
         robot = new ZumoBot(board, five);
-	console.log("Robot is ready");
+        console.log("Robot is ready");
       } else if (boardType === "nunchuk") {
         joystick = new AnalogJoystick(new NunchukJoystick(board, five));
         console.log("Joystick has been initted.");
@@ -43,12 +44,20 @@ function initBoards() {
     new five.Boards(config.ports).on("ready", function() {
       console.log("Boards are ready");
       this.each(assignBoard);
-      if(robot && joystick) {
-        mapAnalogToZumo(robot, joystick);
-        robot.buzz();
-      }
       resolve();
     });
+  });
+}
+
+function performMapping(){
+  return new Promise(function(resolve,reject) {
+    if(robot && joystick) {
+      mapAnalogToZumo(robot, joystick);
+      robot.buzz();
+      resolve();
+    } else {
+      reject("Robot and joystick not ready");
+    }
   });
 }
 
@@ -95,6 +104,5 @@ function mapAnalogToZumo(zumo, analogJoystick) {
     } else {
       zumo.holdFire();
     }
-
   });
 }

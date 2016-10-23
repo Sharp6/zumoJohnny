@@ -60,9 +60,11 @@ var AnalogJoystick = function(driver) {
 	driver.on("fireButton", function(state) {
 		this.emit("fireButton", state);
 	}.bind(this));
-
 };
 
+// I should document where I got this shizzle from.
+// Seems to come from http://www.hacksparrow.com/node-js-eventemitter-tutorial.html
+// I also referenced article http://blog.yld.io/2015/12/15/using-an-event-emitter/#.WAvIs2OTngI
 AnalogJoystick.prototype = Object.create(require('events').EventEmitter.prototype);
 
 module.exports = AnalogJoystick;
