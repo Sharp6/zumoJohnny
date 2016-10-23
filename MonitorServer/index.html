@@ -44,7 +44,8 @@
 
 		<h1>Monitoring</h1>
 
-		<button id="btn">A Button</button>
+		<button id="btn1">Connect joystick</button>
+		<button id="btn2">Disconnect joystick</button>
 
 		<h2>Input</h2>
 
@@ -107,9 +108,11 @@
 		  var socket = io();
 		  var canvas;
 
-		  $('#btn').on('click', function (event) {
-		  	console.log("Got the click, sending to server.");
-		  	socket.emit('clientEvent', { action: 'logme' });
+		  $('#btn1').on('click', function (event) {
+		  	socket.emit('clientEvent', { action: 'connectJoystick' });
+		  });
+		  $('#btn2').on('click', function (event) {
+		  	socket.emit('clientEvent', { action: 'disconnectJoystick' });
 		  });
 
 		  socket.on("stickExtremesReport", function(msg) {

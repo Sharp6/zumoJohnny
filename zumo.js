@@ -12,7 +12,7 @@ var AnalogJoystick = require("./AnalogJoystick");
 var config = JSON.parse(fs.readFileSync('./zumoConfig.json').toString());
 
 var robot;
-var joystick;
+var joysticks = [];
 
 var monitor;
 
@@ -36,7 +36,7 @@ function initBoards() {
         robot = new ZumoBot(board, five);
         console.log("Robot is ready");
       } else if (boardType === "nunchuk") {
-        joystick = new AnalogJoystick(new NunchukJoystick(board, five));
+        joysticks.push(new AnalogJoystick(new NunchukJoystick(board, five)));
         console.log("Joystick has been initted.");
       }
     }
@@ -63,7 +63,7 @@ function performMapping(){
 
 function initMonitor() {
   return new Promise(function(resolve,reject) {
-    monitor = new MonitorServer(joystick);
+    monitor = new MonitorServer(joysticks);
     resolve();
   });
 }

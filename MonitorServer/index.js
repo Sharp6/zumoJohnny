@@ -1,4 +1,4 @@
-var monitorServer = function(joystick) {
+var monitorServer = function(joysticks) {
 	var express = require('express');
 	var path = require('path');
 	var app = express();
@@ -6,15 +6,26 @@ var monitorServer = function(joystick) {
 	var io = require('socket.io')(http);
 
 	console.log("joystick wants to be used.");
-	joystick.on("stickMove", function() {
+
+	function moveCallback() {
 		io.emit("stickExtremesReport", joystick.extremes);
 		io.emit("normalizedPositionReport", joystick.normalizedPosition);
 		io.emit("rawPositionReport", joystick.rawPosition);
-	});
+	}
 
-	joystick.on("fireButton", function(state) {
+	function buttonCallback(state) {
 		io.emit("fireButton", state);
-	});
+	}
+
+	function attachListenersTo(joystick) {
+		joystick.on("stickMove", moveCallback);
+		joystick.on("fireButton", buttonCallback);
+	}
+
+	function removeListenersOf(joystick) {
+		joystick.removeListener("stickMove", moveCallback);
+		joystick.removeListener("fireButton", buttonCallback);
+	}
 	
 	app.get('/', function(req, res) {
 		res.sendFile(__dirname +'/index.html');
@@ -22,10 +33,25 @@ var monitorServer = function(joystick) {
 
 	app.use(express.static(path.join(__dirname, 'public')));
 
+	var handlers = {
+		connectJoystick: function() {
+			console.log("Connecting joystick");
+			attachListenersTo(joysticks[0]);
+		},
+		disconnectJoystick: function() {
+			console.log("Disconnecting joystick");
+			removeListenersOf(joysticks[0]);
+		}
+	};
+
 	io.on('connection', function(socket){
 		console.log('a user connected');
 		socket.on('clientEvent', function(data) {
-			console.log(data);
+			if(data.action && handlers[data.action]) {
+				handlers[data.action]();
+			} else {
+				console.log("No suitable handler found for action", data.action);
+			}
 		});
 	});
 
