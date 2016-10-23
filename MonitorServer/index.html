@@ -117,8 +117,8 @@
 		  	socket.emit('clientEvent', { action: 'disconnectJoystick' });
 		  });
 
-		  socket.on("joysticks", function(names) {
-		  	names.forEach(function(name) {
+		  socket.on("joysticks", function(data) {
+		  	data.names.forEach(function(name) {
 		  		$('#joysticks').append("<div><h3>" + name + "</h3></div>");	
 		  	});
 		  });
