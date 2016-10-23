@@ -44,6 +44,8 @@
 
 		<h1>Monitoring</h1>
 
+		<div id="joysticks"></div>
+
 		<button id="btn1">Connect joystick</button>
 		<button id="btn2">Disconnect joystick</button>
 
@@ -113,6 +115,12 @@
 		  });
 		  $('#btn2').on('click', function (event) {
 		  	socket.emit('clientEvent', { action: 'disconnectJoystick' });
+		  });
+
+		  socket.on("joysticks", function(names) {
+		  	names.forEach(function(name) {
+		  		$('#joysticks').append("<div><h3>" + name + "</h3></div>");	
+		  	});
 		  });
 
 		  socket.on("stickExtremesReport", function(msg) {

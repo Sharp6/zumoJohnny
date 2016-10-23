@@ -46,6 +46,12 @@ var monitorServer = function(joysticks) {
 
 	io.on('connection', function(socket){
 		console.log('a user connected');
+
+		var joystickNames = joysticks.map(function(joystick) {
+			return joystick.name;
+		});
+
+		socket.emit('joysticks', { names: joystickNames });
 		socket.on('clientEvent', function(data) {
 			if(data.action && handlers[data.action]) {
 				handlers[data.action]();

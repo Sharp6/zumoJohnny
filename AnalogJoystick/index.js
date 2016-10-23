@@ -3,10 +3,12 @@
 // - joystickEvents, normalized between -255 and 255, called "stickMove"
 // - buttonEvents, for on and off events, called "fireButton" with a state
 
-var AnalogJoystick = function(driver) {
+var AnalogJoystick = function(name, driver) {
 
 	var minInitVal = 255;
 	var maxInitVal = 0;
+
+	this.name = name;
 
 	this.extremes = {
 		x: {
