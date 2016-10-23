@@ -8,9 +8,9 @@ var monitorServer = function(joysticks) {
 	console.log("joystick wants to be used.");
 
 	function moveCallback() {
-		io.emit("stickExtremesReport", joystick.extremes);
-		io.emit("normalizedPositionReport", joystick.normalizedPosition);
-		io.emit("rawPositionReport", joystick.rawPosition);
+		io.emit("stickExtremesReport", this.extremes);
+		io.emit("normalizedPositionReport", this.normalizedPosition);
+		io.emit("rawPositionReport", this.rawPosition);
 	}
 
 	function buttonCallback(state) {
@@ -18,7 +18,7 @@ var monitorServer = function(joysticks) {
 	}
 
 	function attachListenersTo(joystick) {
-		joystick.on("stickMove", moveCallback);
+		joystick.on("stickMove", moveCallback.bind(joystick));
 		joystick.on("fireButton", buttonCallback);
 	}
 
