@@ -51,8 +51,8 @@ function initBoards() {
 
 function performMapping(){
   return new Promise(function(resolve,reject) {
-    if(robot && joystick) {
-      mapAnalogToZumo(robot, joystick);
+    if(robot && joysticks[0]) {
+      mapAnalogToZumo(robot, joysticks[0]);
       robot.buzz();
       resolve();
     } else {
