@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "johnny-five": "^0.9.2"
+    "johnny-five": "^0.9.2",
+    "node-gamepad": "^0.1.15"
   }
 }

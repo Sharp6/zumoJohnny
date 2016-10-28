@@ -9,7 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "etherport-client": "^0.1.2",
     "express": "^4.14.0",
+    "firmata": "^0.14.1",
     "socket.io": "^1.4.8"
   }
 }
