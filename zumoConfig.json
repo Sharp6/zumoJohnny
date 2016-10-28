@@ -3,9 +3,7 @@
 		{
 			"id": "nunchukBoard", 
 			"port": "/dev/ttyUSB0"
-		}
-	],
-	"unused": [
+		},
 		{
 			"id": "zumoBoard",
 			"port": "/dev/ttyUSB1"

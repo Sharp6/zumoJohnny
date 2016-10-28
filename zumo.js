@@ -17,7 +17,7 @@ var joysticks = [];
 var monitor;
 
 initBoards()
-  //.then(performMapping)
+  .then(performMapping)
   .then(initMonitor)
   .then(function() {
     console.log("Init all done!");
