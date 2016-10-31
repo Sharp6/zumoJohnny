@@ -13,7 +13,10 @@
 		<div id="joysticks" data-bind="foreach:joysticks">
 			<div>
 				<h3 data-bind="text:name"></h3>
-				<select data-bind="options:$parent.robots, optionsText: 'name', value: selectedRobot, optionsCaption: 'Select robot...'"></select>
+				<div class="input-field">
+					<select data-bind="options:$parent.robots, optionsText: 'name', value: selectedRobot, optionsCaption: 'Select robot...'"></select>
+					<label>Choose your bot</label>
+				</div>
 				<p>
 					<br />
 					Mapped robot: <span data-bind="text:mappedRobot()? mappedRobot().name : 'none'"></span>
