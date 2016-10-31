@@ -80,13 +80,20 @@ var MapperCentral = function(joysticks, robots, monitor) {
 			return joystick.name === data.joystickName;
 		});
 
-		var mapping = new Mapping(robot,joystick);
-		mapping.attachListeners();
+		var mapping = mappings.find(function(mapping) {
+			return mapping.joystickName === data.joystickName;
+		});
+
 		if(mapping) {
-			mappings.push(mapping);
+			// Mapping for this joystick already exists. What should happen now?
+		} else {
+			var newMapping = new Mapping(robot,joystick);
+			newMapping.attachListeners();
+			if(newMapping) {
+				mappings.push(newMapping);
+				joystick.notifyBinding(data.robotName);
+			}
 		}
-		
-		joystick.notifyBinding(data.robotName);
 	});
 
 	monitor.on("requestMapRemoval", function(data) {
@@ -94,9 +101,14 @@ var MapperCentral = function(joysticks, robots, monitor) {
 			return mapping.joystickName === data.joystickName;
 		});
 
-		mapping.removeListeners();
+		if(mapping) {
+			mapping.removeListeners();
+			mappings.splice(mappings.indexOf(mapping),1);
+			mapping.joystick.notifyBinding(null);
+		} else {
+			// Mapping not found. What should happen now?
+		}
 
-		mapping.joystick.notifyBinding(null);
 	});
 };
 
