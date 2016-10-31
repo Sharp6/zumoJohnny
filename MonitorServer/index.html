@@ -1,51 +1,27 @@
 <html>
 	<head>
-		<style>
-			@import 'https://fonts.googleapis.com/css?family=Roboto:300,400,500';
-
-			body {
-				margin: 0 auto;
-				max-width: 50em;
-			  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-			  line-height: 1.5;
-  			padding: 4em 1em;
-  			color: #555;
-			}
-
-			h1,
-			h2,
-			th,
-			strong {
-				color: #333;
-			}
-			table {
-				font-size: 0.8em;
-				border-collapse: collapse;
-			}
-
-			td {
-				min-width: 4em;
-				text-align: center;
-			}
-
-			th.joystickLabel {
-				text-align: left;
-			}
-
-			tr.titleRow th {
-				background: #eee;
-				line-height: 1.5;
-			}
-		</style>
-
+		<title>Monitor Server J5 Zumo Robot System</title>
+		<link rel='stylesheet' href='/stylesheets/monitor.css' />
 	</head>
 
 	<body>
 
 		<h1>Monitoring</h1>
 
-		<div id="joysticks"></div>
+		<div id="joysticks" data-bind="foreach:joysticks">
+			<div>
+				<h3 data-bind="text:name"></h3>
+				<p>joystickCommands.</p>
+				<select data-bind="options:$parent.robots, optionsText: 'name', value: selectedRobot, optionsCaption: 'Select robot...'"></select>
+				<p>
+					Selected robot: <span data-bind="text:selectedRobot()? selectedRobot().name : 'none yet'"></span>
+				</p>
+				<button data-bind="click:requestMapping">Map me!</button>
+			</div>
+		</div>
 
+		<script>
+		/*
 		<button id="btn1">Connect joystick</button>
 		<button id="btn2">Disconnect joystick</button>
 
@@ -101,26 +77,70 @@
 			</tr>
 			
 		</table>
-
-		<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+		*/
+		</script>
+		
 		<script src="/socket.io/socket.io.js"></script>
-		<script src="/p5.js"></script>
+		<script src="/libraries/jquery.js"></script>
+		<script src="/libraries/p5.js"></script>
+		<script src="/libraries/knockout.js"></script>
 
 		<script>
 		  var socket = io();
 		  var canvas;
 
+		  var Joystick = function(name) {
+		  	this.name = name;
+		  	this.selectedRobot = ko.observable();
+		  	this.mappedRobot = ko.observable();
+		  	this.requestMapping = function() {
+		  		console.log("Requesting mapping: ", this.name, this.selectedRobot().name);
+		  		socket.emit('clientEvent', { action: 'requestMapping', joystick: this.name, robot: this.selectedRobot().name });
+		  	};
+		  };
+
+		  var Robot = function(name) {
+		  	this.name = name;
+		  };
+
+			var joysticks = ko.observableArray([]);
+			var robots = ko.observableArray([]);
+
+		  socket.on("joysticks", function(data) {
+		  	data.names.forEach(function(name) {
+		  		joysticks.push(new Joystick(name));
+		  	});
+		  });
+
+		  socket.on("robots", function(data) {
+		  	data.names.forEach(function(name) {
+		  		robots.push(new Robot(name));
+		  	});
+		  });
+
+		  socket.on("bindingNotification", function(data) {
+		  	var currentJoystick = joysticks().find(function(joystick) {
+		  		return joystick.name === data.joystickName;
+		  	});
+		  	if(data.isBound) {
+		  		currentJoystick.mappedRobot(data.robotName);	
+		  	} else {
+		  		currentJoystick.mappedRobot();
+		  	}
+		  });
+
+			var vm = {
+				joysticks: joysticks,
+				robots: robots
+			};
+			ko.applyBindings(vm);
+
+		  /*
 		  $('#btn1').on('click', function (event) {
 		  	socket.emit('clientEvent', { action: 'connectJoystick' });
 		  });
 		  $('#btn2').on('click', function (event) {
 		  	socket.emit('clientEvent', { action: 'disconnectJoystick' });
-		  });
-
-		  socket.on("joysticks", function(data) {
-		  	data.names.forEach(function(name) {
-		  		$('#joysticks').append("<div><h3>" + name + "</h3></div>");	
-		  	});
 		  });
 
 		  socket.on("stickExtremesReport", function(msg) {
@@ -165,9 +185,8 @@
 				translate(100,100);
 		  }
 
-		  function draw() {
-
-		  }
+		  function draw() { }
+		  */
 		</script>
 
 	</body>

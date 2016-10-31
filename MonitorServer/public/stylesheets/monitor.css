@@ -1,0 +1,35 @@
+@import 'https://fonts.googleapis.com/css?family=Roboto:300,400,500';
+
+body {
+	margin: 0 auto;
+	max-width: 50em;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  line-height: 1.5;
+	padding: 4em 1em;
+	color: #555;
+}
+
+h1,
+h2,
+th,
+strong {
+	color: #333;
+}
+table {
+	font-size: 0.8em;
+	border-collapse: collapse;
+}
+
+td {
+	min-width: 4em;
+	text-align: center;
+}
+
+th.joystickLabel {
+	text-align: left;
+}
+
+tr.titleRow th {
+	background: #eee;
+	line-height: 1.5;
+}

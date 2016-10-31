@@ -1,6 +1,6 @@
 var ZumoDriver = require('./../zumoDriver');
 
-var ZumoBot = function(board, five) {
+var ZumoBot = function(name, board, five) {
   console.log("Hello, I'm Zumo, and I've got board", board.port);
 	var configs = five.Motor.SHIELD_CONFIGS.POLOLU_DRV8835_SHIELD;
 
@@ -18,7 +18,7 @@ var ZumoBot = function(board, five) {
   var laser = new five.Led({ board: board, pin: 4 });
   var buzzer = new five.Piezo({ board: board, pin: 3 });
 
-  return new ZumoDriver({ motors: motors, laser: laser, buzzer: buzzer });
+  return new ZumoDriver({ name: name, motors: motors, laser: laser, buzzer: buzzer });
 };
 
 module.exports = ZumoBot;

@@ -1,11 +1,13 @@
-var monitorServer = function(joysticks) {
+var MonitorServer = function(joysticks,robots) {
 	var express = require('express');
 	var path = require('path');
 	var app = express();
 	var http = require('http').Server(app);
 	var io = require('socket.io')(http);
-
-	console.log("joystick wants to be used.");
+	app.get('/', function(req, res) {
+		res.sendFile(__dirname +'/index.html');
+	});
+	app.use(express.static(path.join(__dirname, 'public')));
 
 	function moveCallback(state) {
 		io.emit("stickExtremesReport", state.extremes);
@@ -26,35 +28,43 @@ var monitorServer = function(joysticks) {
 		joystick.removeListener("stickMove", moveCallback);
 		joystick.removeListener("fireButton", buttonCallback);
 	}
-	
-	app.get('/', function(req, res) {
-		res.sendFile(__dirname +'/index.html');
-	});
-
-	app.use(express.static(path.join(__dirname, 'public')));
 
 	var handlers = {
-		connectJoystick: function() {
+		connectJoystick: function(data, socket) {
 			console.log("Connecting joystick");
 			attachListenersTo(joysticks[0]);
 		},
-		disconnectJoystick: function() {
+		disconnectJoystick: function(data, socket) {
 			console.log("Disconnecting joystick");
 			removeListenersOf(joysticks[0]);
-		}
+		},
+		requestMapping: function(data) {
+			this.emit('requestMapping', { joystickName: data.joystick, robotName: data.robot });
+		}.bind(this)
 	};
+
+	var joystickNames = joysticks.map(function(joystick) {
+		return joystick.name;
+	});
+
+	var robotNames = robots.map(function(robot) {
+		return robot.name;
+	});
+
+	joysticks.forEach(function(joystick) {
+		joystick.on("bindingNotification", function(data) {
+			io.emit("bindingNotification", data);
+		});
+	});
 
 	io.on('connection', function(socket){
 		console.log('a user connected');
 
-		var joystickNames = joysticks.map(function(joystick) {
-			return joystick.name;
-		});
-
+		socket.emit('robots', { names: robotNames });
 		socket.emit('joysticks', { names: joystickNames });
 		socket.on('clientEvent', function(data) {
 			if(data.action && handlers[data.action]) {
-				handlers[data.action]();
+				handlers[data.action](data, socket);
 			} else {
 				console.log("No suitable handler found for action", data.action);
 			}
@@ -64,8 +74,11 @@ var monitorServer = function(joysticks) {
 	http.listen(1804, function(){
 		console.log('listening on *:1804');
 	});
-
-	return app;
 };
 
-module.exports = monitorServer;
+// I should document where I got this shizzle from.
+// Seems to come from http://www.hacksparrow.com/node-js-eventemitter-tutorial.html
+// I also referenced article http://blog.yld.io/2015/12/15/using-an-event-emitter/#.WAvIs2OTngI
+MonitorServer.prototype = Object.create(require('events').EventEmitter.prototype);
+
+module.exports = MonitorServer;

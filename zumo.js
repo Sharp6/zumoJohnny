@@ -2,6 +2,7 @@ var fs = require('fs');
 
 var five = require("johnny-five");
 
+var MapperCentral = require('./MapperCentral');
 var MonitorServer = require('./MonitorServer');
 var ZumoBot = require("./zumoBot");
 //var AtariJoystick = require("./AtariJoystick");
@@ -11,14 +12,16 @@ var AnalogJoystick = require("./AnalogJoystick");
 
 var config = JSON.parse(fs.readFileSync('./zumoConfig.json').toString());
 
-var robot;
+//var robot;
+//var joystick;
+var robots = [];
 var joysticks = [];
-
 var monitor;
+var mapper;
 
 initBoards()
-  .then(performMapping)
   .then(initMonitor)
+  .then(initMapper)
   .then(function() {
     console.log("Init all done!");
   })
@@ -33,7 +36,8 @@ function initBoards() {
       console.log("Got boardType", boardType);
 
       if(boardType === "zumo") {
-        robot = new ZumoBot(board, five);
+        //robot = new ZumoBot(board, five);
+        robots.push(new ZumoBot(board.id, board, five));
         console.log("Robot is ready");
       } else if (boardType === "nunchuk") {
         joysticks.push(new AnalogJoystick(board.id, new NunchukJoystick(board, five)));
@@ -49,60 +53,16 @@ function initBoards() {
   });
 }
 
-function performMapping(){
-  return new Promise(function(resolve,reject) {
-    if(robot && joysticks[0]) {
-      mapAnalogToZumo(robot, joysticks[0]);
-      robot.buzz();
-      resolve();
-    } else {
-      reject("Robot and joystick not ready");
-    }
-  });
-}
-
 function initMonitor() {
   return new Promise(function(resolve,reject) {
-    monitor = new MonitorServer(joysticks);
+    monitor = new MonitorServer(joysticks, robots);
     resolve();
   });
 }
 
-function mapAnalogToZumo(zumo, analogJoystick) {
-  console.log("Doing the mapping!");
-  
-  analogJoystick.on("stickMove", function() {
-    console.log("ZUMOMAPPER: Got a stickmove!");
-    var leftMotorSpeed, rightMotorSpeed;
-
-    leftMotorSpeed = rightMotorSpeed = analogJoystick.normalizedPosition.y;
-    leftMotorSpeed += analogJoystick.normalizedPosition.x;
-    rightMotorSpeed -= analogJoystick.normalizedPosition.x;
-
-    // This should never happen
-    if (leftMotorSpeed > 255) {
-      leftMotorSpeed = 255;
-    } else if (leftMotorSpeed < -255) {
-      leftMotorSpeed = -255;
-    }
-
-    // This should never happen
-    if (rightMotorSpeed > 255) {
-      rightMotorSpeed = 255;
-    } else if (rightMotorSpeed < -255) {
-      rightMotorSpeed = -255;
-    }
-
-    console.log("Calling the robot with", leftMotorSpeed, rightMotorSpeed);
-    zumo.leftDirect(leftMotorSpeed);
-    zumo.rightDirect(rightMotorSpeed);
-  });
-
-  analogJoystick.on("fireButton", function(state) {
-    if(state === "on") {
-      zumo.fire();
-    } else {
-      zumo.holdFire();
-    }
+function initMapper() {
+  return new Promise(function(resolve,reject) {
+    mapper = new MapperCentral(joysticks, robots, monitor);
+    resolve();
   });
 }

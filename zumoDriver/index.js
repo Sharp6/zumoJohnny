@@ -2,6 +2,7 @@ var ZumoDriver = function(options) {
 	var motors = options.motors;
 	var laser = options.laser;
 	var buzzer = options.buzzer;
+	var name = options.name;
 
 	var speed = options.speed || 255;
 	var angleSpeed = options.angleSpeed || 40;
@@ -102,6 +103,7 @@ var ZumoDriver = function(options) {
 	};
 
 	return {
+		name: name,
 		setSpeed: setSpeed,
 		fire: fire,
 		holdFire: holdFire,

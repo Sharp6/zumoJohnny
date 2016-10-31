@@ -31,6 +31,13 @@ var AnalogJoystick = function(name, driver) {
 		y: 0
 	};
 
+	this.isBound = false;
+
+	this.notifyBinding = function(robotName) {
+		this.isBound = true;
+		this.emit("bindingNotification", { isBound: this.isBound, robotName: robotName, joystickName: this.name });
+	}.bind(this);
+
 	var updateExtremes = function(val, axis) {
 		if(val < this.extremes[axis].min) {
 			this.extremes[axis].min = val;
