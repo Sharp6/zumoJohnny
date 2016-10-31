@@ -81,6 +81,7 @@ var MapperCentral = function(joysticks, robots, monitor) {
 		});
 
 		var mapping = new Mapping(robot,joystick);
+		mapping.attachListeners();
 		if(mapping) {
 			mappings.push(mapping);
 		}
