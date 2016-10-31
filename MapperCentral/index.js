@@ -1,4 +1,4 @@
-var MapperCentral = function(joystick, robots, monitor) {
+var MapperCentral = function(joysticks, robots, monitor) {
 
 	var performMapping = function(){
 		return new Promise(function(resolve,reject) {
