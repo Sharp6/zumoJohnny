@@ -125,11 +125,13 @@
 		  });
 
 		  socket.on("bindingNotification", function(data) {
-		  	console.log("BINDINGNOTIFICATION", data);
 		  	var currentJoystick = joysticks().find(function(joystick) {
 		  		return joystick.name === data.joystickName;
 		  	});
-		  	currentJoystick.mappedRobot(data.robotName);
+		  	var currentRobot = robots.find(function(robot) {
+		  		return robot.name === data.robotName;
+		  	});
+		  	currentJoystick.mappedRobot(currentRobot);
 		  	/*
 		  	if(data.isBound) {
 		  		currentJoystick.mappedRobot(data.robotName);
