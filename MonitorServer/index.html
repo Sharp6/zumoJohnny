@@ -128,7 +128,7 @@
 		  	var currentJoystick = joysticks().find(function(joystick) {
 		  		return joystick.name === data.joystickName;
 		  	});
-		  	var currentRobot = robots.find(function(robot) {
+		  	var currentRobot = robots().find(function(robot) {
 		  		return robot.name === data.robotName;
 		  	});
 		  	currentJoystick.mappedRobot(currentRobot);
