@@ -34,7 +34,11 @@ var AnalogJoystick = function(name, driver) {
 	this.isBound = false;
 
 	this.notifyBinding = function(robotName) {
-		this.isBound = true;
+		if(robotName) {
+			this.isBound = true;
+		} else {
+			this.isBound = false;
+		}
 		this.emit("bindingNotification", { isBound: this.isBound, robotName: robotName, joystickName: this.name });
 	}.bind(this);
 

@@ -1,3 +1,4 @@
+"use strict";
 var MonitorServer = function(joysticks,robots) {
 	var express = require('express');
 	var path = require('path');
@@ -40,6 +41,9 @@ var MonitorServer = function(joysticks,robots) {
 		},
 		requestMapping: function(data) {
 			this.emit('requestMapping', { joystickName: data.joystick, robotName: data.robot });
+		}.bind(this),
+		requestMapRemoval: function(data) {
+			this.emit('requestMapRemoval', { joystickName: data.joystick });
 		}.bind(this)
 	};
 

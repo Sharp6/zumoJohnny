@@ -15,8 +15,12 @@
 				<select data-bind="options:$parent.robots, optionsText: 'name', value: selectedRobot, optionsCaption: 'Select robot...'"></select>
 				<p>
 					Selected robot: <span data-bind="text:selectedRobot()? selectedRobot().name : 'none yet'"></span>
+					<br />
+					Mapped robot: <span data-bind="text:mappedRobot()? mappedRobot().name : 'none yet'"></span>
 				</p>
 				<button data-bind="click:requestMapping">Map me!</button>
+				<button data-bind="click:requestMapRemoval">Remove mapping</button>
+				
 			</div>
 		</div>
 
@@ -97,6 +101,9 @@
 		  		console.log("Requesting mapping: ", this.name, this.selectedRobot().name);
 		  		socket.emit('clientEvent', { action: 'requestMapping', joystick: this.name, robot: this.selectedRobot().name });
 		  	};
+		  	this.requestMapRemoval = function() {
+		  		socket.emit('clientEvent', { action: 'requestMapRemoval', joystick: this.name });
+		  	}
 		  };
 
 		  var Robot = function(name) {
@@ -122,11 +129,13 @@
 		  	var currentJoystick = joysticks().find(function(joystick) {
 		  		return joystick.name === data.joystickName;
 		  	});
+		  	currentJoystick.mappedRobot(data.robotName);
+		  	/*
 		  	if(data.isBound) {
-		  		currentJoystick.mappedRobot(data.robotName);	
+		  		currentJoystick.mappedRobot(data.robotName);
 		  	} else {
 		  		currentJoystick.mappedRobot();
-		  	}
+		  	}*/
 		  });
 
 			var vm = {
