@@ -11,7 +11,6 @@
 		<div id="joysticks" data-bind="foreach:joysticks">
 			<div>
 				<h3 data-bind="text:name"></h3>
-				<p>joystickCommands.</p>
 				<select data-bind="options:$parent.robots, optionsText: 'name', value: selectedRobot, optionsCaption: 'Select robot...'"></select>
 				<p>
 					Selected robot: <span data-bind="text:selectedRobot()? selectedRobot().name : 'none yet'"></span>
@@ -126,6 +125,7 @@
 		  });
 
 		  socket.on("bindingNotification", function(data) {
+		  	console.log("BINDINGNOTIFICATION", data);
 		  	var currentJoystick = joysticks().find(function(joystick) {
 		  		return joystick.name === data.joystickName;
 		  	});
