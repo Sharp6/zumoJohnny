@@ -1,34 +1,30 @@
 <html>
 	<head>
 		<title>Monitor Server J5 Zumo Robot System</title>
+		<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 		<link rel='stylesheet' href='/stylesheets/monitor.css' />
+		<link rel='stylesheet' href='/stylesheets/materialize.min.css' />
 	</head>
 
 	<body>
 
-		<h1>Monitoring</h1>
+		<h1>Joystick mappings</h1>
 
 		<div id="joysticks" data-bind="foreach:joysticks">
 			<div>
 				<h3 data-bind="text:name"></h3>
 				<select data-bind="options:$parent.robots, optionsText: 'name', value: selectedRobot, optionsCaption: 'Select robot...'"></select>
 				<p>
-					Selected robot: <span data-bind="text:selectedRobot()? selectedRobot().name : 'none yet'"></span>
 					<br />
-					Mapped robot: <span data-bind="text:mappedRobot()? mappedRobot().name : 'none yet'"></span>
+					Mapped robot: <span data-bind="text:mappedRobot()? mappedRobot().name : 'none'"></span>
 				</p>
 				<button data-bind="click:requestMapping">Map me!</button>
 				<button data-bind="click:requestMapRemoval">Remove mapping</button>
-				
+				<button data-bind="click:monitorJoystick">Monitor joystick</button>
 			</div>
 		</div>
-
-		<script>
-		/*
-		<button id="btn1">Connect joystick</button>
-		<button id="btn2">Disconnect joystick</button>
-
-		<h2>Input</h2>
+	
+		<h1>Monitoring</h1>
 
 		<table>
 			<tr class="titleRow">
@@ -80,11 +76,10 @@
 			</tr>
 			
 		</table>
-		*/
-		</script>
 		
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="/libraries/jquery.js"></script>
+		<script src="/libraries/materialize.min.js"></script>
 		<script src="/libraries/p5.js"></script>
 		<script src="/libraries/knockout.js"></script>
 
@@ -102,7 +97,10 @@
 		  	};
 		  	this.requestMapRemoval = function() {
 		  		socket.emit('clientEvent', { action: 'requestMapRemoval', joystick: this.name });
-		  	}
+		  	};
+		  	this.monitorJoystick = function() {
+		  		socket.emit('clientEvent', { action: 'monitorJoystick', joystick: this.name });
+		  	};
 		  };
 
 		  var Robot = function(name) {
@@ -132,12 +130,6 @@
 		  		return robot.name === data.robotName;
 		  	});
 		  	currentJoystick.mappedRobot(currentRobot);
-		  	/*
-		  	if(data.isBound) {
-		  		currentJoystick.mappedRobot(data.robotName);
-		  	} else {
-		  		currentJoystick.mappedRobot();
-		  	}*/
 		  });
 
 			var vm = {

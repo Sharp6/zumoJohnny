@@ -31,13 +31,20 @@ var MonitorServer = function(joysticks,robots) {
 	}
 
 	var handlers = {
-		connectJoystick: function(data, socket) {
-			console.log("Connecting joystick");
-			attachListenersTo(joysticks[0]);
+		monitorJoystick: function(data, socket) {
+			joysticks.forEach(function(joystick) {
+				if(joystick.name === data.joystick) {
+					attachListenersTo(joystick);
+				} else {
+					removeListenersOf(joystick);
+				}
+			});
 		},
 		disconnectJoystick: function(data, socket) {
-			console.log("Disconnecting joystick");
-			removeListenersOf(joysticks[0]);
+			var joystick = joysticks.find(function(joystick) {
+				return joystick.name === data.joystick;
+			});
+			removeListenersOf(joystick);
 		},
 		requestMapping: function(data) {
 			this.emit('requestMapping', { joystickName: data.joystick, robotName: data.robot });
