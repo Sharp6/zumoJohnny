@@ -63,6 +63,7 @@ var MonitorServer = function(joysticks,robots,assetManager) {
 	});
 
 	assetManager.on("newAsset", function(data) {
+		console.log("MONITORSERVER got new asset", data);
 		io.emit("newAsset", data);
 	});
 

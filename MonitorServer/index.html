@@ -153,6 +153,7 @@
 
 		  // ASSETS
 		  socket.on("newAsset", function(data) {
+		  	console.log("FRONT got new asset", data);
 		  	assets.push(new Asset(data));
 		  });
 
