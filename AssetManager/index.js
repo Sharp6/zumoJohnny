@@ -40,12 +40,11 @@ var AssetManager = function() {
 
 	client.on('message', function (topic, message) {
 		var parts = message.toString().split("|");
-		var data = parts.map(function(part) {
+		var data = parts.reduce(function(data, part) {
 			var keyValue = part.split(":");
-			var pair = {};
-			pair[keyValue[0]] = keyValue[1];
-			return pair;
-		});
+			data[keyValue[0]] = keyValue[1];
+			return data;
+		}, {});
 		console.log("ASSETMANAGER formatted data",data);
 		var asset = new Asset(data);
 		assets.push(asset);
