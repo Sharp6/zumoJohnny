@@ -190,6 +190,9 @@
 				assets: assets
 			};
 			ko.applyBindings(vm);
+			$(document).ready(function() {
+		    $('select').material_select();
+		  });
 
 			// Oooh, so nasty!
 		 	$('select').material_select();
