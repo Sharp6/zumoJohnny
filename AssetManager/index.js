@@ -46,6 +46,7 @@ var AssetManager = function() {
 			pair[keyValue[0]] = keyValue[1];
 			return pair;
 		});
+		console.log("ASSETMANAGER formatted data",data);
 		var asset = new Asset(data);
 		assets.push(asset);
 		this.emit("newAsset", asset);
