@@ -15,7 +15,7 @@ function Asset(data) {
 	assetClient.on('message', function(topic, message) {
 		console.log("Got assetMessage", message.toString(), "on topic", topic);
 		var msgObj = {};
-		message.split(":").forEach(function(keyValue) {
+		message.toString().split(":").forEach(function(keyValue) {
 			msgObj[keyValue[0]] = keyValue[1];
 		});
 
