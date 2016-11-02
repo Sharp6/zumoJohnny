@@ -1,5 +1,5 @@
 "use strict";
-var MonitorServer = function(joysticks,robots) {
+var MonitorServer = function(joysticks,robots,assetManager) {
 	var express = require('express');
 	var path = require('path');
 	var app = express();
@@ -60,6 +60,10 @@ var MonitorServer = function(joysticks,robots) {
 
 	var robotNames = robots.map(function(robot) {
 		return robot.name;
+	});
+
+	assetManager.on("newAsset", function(data) {
+		io.emit("newAsset", data);
 	});
 
 	joysticks.forEach(function(joystick) {

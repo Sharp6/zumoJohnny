@@ -4,6 +4,7 @@ var five = require("johnny-five");
 
 var MapperCentral = require('./MapperCentral');
 var MonitorServer = require('./MonitorServer');
+var AssetManager = require('./AssetManager');
 var ZumoBot = require("./zumoBot");
 //var AtariJoystick = require("./AtariJoystick");
 //var Ps3Joystick = require("./ps3Joystick");
@@ -18,8 +19,10 @@ var robots = [];
 var joysticks = [];
 var monitor;
 var mapper;
+var assetManager;
 
 initBoards()
+  .then(initAssetManager)
   .then(initMonitor)
   .then(initMapper)
   .then(function() {
@@ -55,7 +58,7 @@ function initBoards() {
 
 function initMonitor() {
   return new Promise(function(resolve,reject) {
-    monitor = new MonitorServer(joysticks, robots);
+    monitor = new MonitorServer(joysticks, robots, assetManager);
     resolve();
   });
 }
@@ -63,6 +66,13 @@ function initMonitor() {
 function initMapper() {
   return new Promise(function(resolve,reject) {
     mapper = new MapperCentral(joysticks, robots, monitor);
+    resolve();
+  });
+}
+
+function initAssetManager() {
+  return new Promise(function(resolve,reject) {
+    assetManager = new AssetManager();
     resolve();
   });
 }

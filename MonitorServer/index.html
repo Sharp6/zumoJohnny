@@ -8,6 +8,13 @@
 
 	<body>
 
+		<h1>Assets</h1>
+		<ul data-bind="foreach:assets">
+			<li>
+				<span data-bind="text:assetId"></span> (<span data-bind="text:type"></span>): <span data-bind="text:state"></span>.
+			</li>
+		</ul>
+
 		<h1>Joystick mappings</h1>
 
 		<div id="joysticks" data-bind="foreach:joysticks">
@@ -112,8 +119,15 @@
 		  	this.name = name;
 		  };
 
+		  var Asset = function(data) {
+		  	this.type = data.type;
+		  	this.assetId = data.assetId;
+		  	this.state = data.state || "Unknown state":
+		  };
+
 			var joysticks = ko.observableArray([]);
 			var robots = ko.observableArray([]);
+			var assets = ko.observableArray([]);
 
 		  socket.on("joysticks", function(data) {
 		  	data.names.forEach(function(name) {
@@ -135,6 +149,11 @@
 		  		return robot.name === data.robotName;
 		  	});
 		  	currentJoystick.mappedRobot(currentRobot);
+		  });
+
+		  // ASSETS
+		  socket.on("newAsset", function(data) {
+		  	assets.push(new Asset(data));
 		  });
 
 			var vm = {
