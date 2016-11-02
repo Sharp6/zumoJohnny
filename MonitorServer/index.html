@@ -148,8 +148,6 @@
 		  	data.names.forEach(function(name) {
 		  		robots.push(new Robot(name));
 		  	});
-		  	// Oooh, so nasty!
-		  	$('select').material_select();
 		  });
 
 		  socket.on("bindingNotification", function(data) {
@@ -191,6 +189,9 @@
 				assets: assets
 			};
 			ko.applyBindings(vm);
+
+			// Oooh, so nasty!
+		 	$('select').material_select();
 
 		  /*
 		  $('#btn1').on('click', function (event) {
