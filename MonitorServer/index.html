@@ -148,6 +148,8 @@
 		  	data.names.forEach(function(name) {
 		  		robots.push(new Robot(name));
 		  	});
+		  	// Oooh, so nasty!
+		  	$('select').material_select();
 		  });
 
 		  socket.on("bindingNotification", function(data) {
