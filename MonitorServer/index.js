@@ -69,6 +69,10 @@ var MonitorServer = function(joysticks,robots,assetManager) {
 		asset.on("assetStateUpdate", function(state) {
 			io.emit("assetStateUpdate", asset.assetId + "|" + state);
 		});
+
+		asset.on("assetDisconnected", function() {
+			io.emit("assetDisconnected", asset.assetId);
+		});
 	});
 
 	joysticks.forEach(function(joystick) {

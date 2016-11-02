@@ -167,6 +167,13 @@
 		  	asset.state(state);
 		  });
 
+		  socket.on("assetDisconnected", function(assetId) {
+		  	var asset = assets().find(function(asset) {
+		  		return asset.assetId === assetId;
+		  	});
+		  	assets.splice(assets.indexOf(asset), 1);
+		  });
+
 			var vm = {
 				joysticks: joysticks,
 				robots: robots,
