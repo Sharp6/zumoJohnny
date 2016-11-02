@@ -148,6 +148,7 @@
 		  	data.names.forEach(function(name) {
 		  		robots.push(new Robot(name));
 		  	});
+		  	$('select').material_select();
 		  });
 
 		  socket.on("bindingNotification", function(data) {
