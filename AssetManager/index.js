@@ -19,8 +19,11 @@ function Asset(data) {
 			msgObj[keyValue[0]] = keyValue[1];
 		});
 
+		console.log("msgObj", msgObj);
+
 		if(msgObj.state) {
 			this.state = msgObj.state;
+			console.log("AssetManager emitting", this.state);
 			this.emit("assetStateUpdate", this.state);
 		}
 	}.bind(this));
