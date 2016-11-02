@@ -122,7 +122,7 @@
 		  var Asset = function(data) {
 		  	this.type = data.type;
 		  	this.assetId = data.assetId;
-		  	this.state = data.state || "Unknown state";
+		  	this.state = ko.observable("Unknown state");
 		  };
 
 			var joysticks = ko.observableArray([]);
@@ -157,9 +157,20 @@
 		  	assets.push(new Asset(data));
 		  });
 
+		  socket.on("assetStateUpdate", function(data) {
+		  	var assetId = data.split("|")[0];
+		  	var state = data.split("|")[1];
+
+		  	var asset = assets().find(function(asset) {
+		  		return asset.assetId === assetId;
+		  	});
+		  	asset.state(state);
+		  });
+
 			var vm = {
 				joysticks: joysticks,
-				robots: robots
+				robots: robots,
+				assets: assets
 			};
 			ko.applyBindings(vm);
 

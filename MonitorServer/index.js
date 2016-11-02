@@ -62,9 +62,13 @@ var MonitorServer = function(joysticks,robots,assetManager) {
 		return robot.name;
 	});
 
-	assetManager.on("newAsset", function(data) {
-		console.log("MONITORSERVER got new asset", data);
-		io.emit("newAsset", data);
+	assetManager.on("newAsset", function(asset) {
+		console.log("MONITORSERVER got new asset", asset);
+		io.emit("newAsset", asset);
+
+		asset.on("assetStateUpdate", function(state) {
+			io.emit("assetStateUpdate", asset.assetId + "|" + state);
+		});
 	});
 
 	joysticks.forEach(function(joystick) {
