@@ -10,12 +10,30 @@
 
 			<h1>Games</h1>
 
-			<ul data-bind="foreach:games">
-				<li>
-					<span data-bind="text:numberOfChallenges"></span>
-				</li>
-			</ul>
-			<h5>New game</h5>
+			<div data-bind="foreach:games">
+				<div class="panel panel-default">
+				  <div class="panel-heading"><span data-bind="text:name"></span></div>
+				  <div class="panel-body">
+				  	<button class="btn btn-default" data-bind="click:startGame">Start game</button>
+				    <p>
+				    	Number of challenges: <span data-bind="text:numberOfChallenges"></span>
+				    	<ul data-bind="foreach:challenges">
+				    		<li>
+				    			<span data-bind="text:name"></span>: <span data-bind="text:state"></span> (asset: <span data-bind="text:asset"></span>)
+				    		</li>
+				    	</ul>
+				    </p>
+				    <p>
+				    	Available assets:
+				    	<ul data-bind="foreach:assets">
+				    		<li><span data-bind="text:assetId"></span> (<span data-bind="text:type"></span>)</li>
+				    	</ul>
+				    </p>
+				  </div>
+				</div>
+			</div>
+
+			<h3>New game</h3>
 			<form data-bind="with:newGame">
 				<div class="form-group">
 			    <label for="newGameName">Game name</label>
@@ -28,7 +46,7 @@
 			</form>
 			<button class="btn btn-primary" data-bind="click:createGame">Create Game</button>
 
-			<h1>Players</h1>
+			<h3>Players</h3>
 
 			<ul data-bind="foreach:players">
 				<li>
@@ -180,6 +198,19 @@
 		  	this.players = data.players;
 		  	this.assets = data.assets;
 		  	this.challenges = data.challenges;
+
+		  	this.startGame = function() {
+		  		socket.emit('clientEvent', { action: 'startGame', gameName: this.name });
+		  	}
+		  };
+
+		  var Challenge = function(data) {
+		  	this.name = data.name;
+		  	this.asset = data.asset;
+		  	this.timeLimit = data.timeLimit;
+		  	this.player = data.player;
+		  	this.points = data.points;
+		  	this.state = ko.observable();
 		  };
 
 			var joysticks = ko.observableArray([]);
@@ -249,6 +280,22 @@
 		  		return game.name === name;
 		  	});
 		  	game.state(state);
+		  });
+
+		  socket.on("challengeStateChange", function(data) {
+		  	var challengeName = data.split("|")[0];
+		  	var challengeState = data.split("|")[1];
+		  	// get game
+		  	var gameName = challengeName.split("Challenge")[0]; // challengeName is gameName + "challenge" + i in game constructor
+		  	var game = games().find(function(game) {
+		  		return game.name === gameName;
+		  	});
+		  	// get challenge
+		  	var challenge = game.challenges.find(function(challenge) {
+		  		return challenge.name === challengeName;
+		  	});
+		  	// update challenge
+		  	challenge.state(challengeState);
 		  });
 
 		  // ASSETS

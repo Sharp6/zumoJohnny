@@ -68,6 +68,10 @@ var MonitorServer = function(joysticks,robots,managers) {
 				managers.gameManager.createGame({numberOfChallenges: data.numberOfChallenges, players: players, assets: assets });
 			}
 		},
+		startGame: function(data, socket) {
+			var game = managers.gameManager.getGameFor(data.gameName);
+			game.startGame();
+		},
 		createPlayer: function(data, socket) {
 			managers.playerManager.createPlayer(data);
 		}
@@ -86,6 +90,12 @@ var MonitorServer = function(joysticks,robots,managers) {
 
 		game.on("gameStateChange", function(state) {
 			io.emit("gameStateChange", game.name + "|" + state);
+		});
+
+		game.challenges.forEach(function(challenge) {
+			challenge.on("stateChange", function(challengeState) {
+				io.emit("challengeStateChange", challenge.name + "|" + challengeState);
+			});
 		});
 	});
 

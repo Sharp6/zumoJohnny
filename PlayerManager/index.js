@@ -2,6 +2,11 @@
 
 var Player = function(options) {
 	this.name = options.name;
+	this.points = 0;
+
+	this.addPoints = function(newPoints) {
+		this.points += newPoints;
+	}.bind(this);
 };
 
 var PlayerManager = function() {

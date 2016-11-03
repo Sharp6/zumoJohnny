@@ -14,14 +14,17 @@ var Game = function(options) {
 	this.currentChallenge = 0;
 	this.state = "init";
 
-	for(var i = 0; i < this.numberOfChallenges; i++) {
-		var selectedAsset = this.assets[Math.floor(Math.random() * this.assets.length)];
-		var timeLimit = 30;
-		var newChallenge = new Challenge({asset: selectedAsset, timeLimit: timeLimit});
-		this.challenges.push(newChallenge);
-	}
+	this.players.forEach(function(player) {
+		for(var i = 0; i < this.numberOfChallenges; i++) {
+			var challengeName = this.name + "Challenge" + i;
+			var selectedAsset = this.assets[Math.floor(Math.random() * this.assets.length)];
+			var newChallenge = new Challenge({ name: challengeName, asset: selectedAsset, player: player });
+			this.challenges.push(newChallenge);
+		}
+	}.bind(this));
+	
 
-	this.start = function() {
+	this.startGame = function() {
 		if(this.state == "init") {
 			this.startTime = moment();
 			activateChallenge(this.challenges[this.currentChallenge]);
@@ -35,27 +38,31 @@ var Game = function(options) {
 	}.bind(this);
 
 	var activateChallenge = function(challenge) {
-		challenge.on("challengeComplete", function() {
-			challenge.player.addPoints(challenge.points);
-			nextChallenge();
-		});
-		challenge.on("challengeTimeout", function() {
-			nextChallenge();
+		challenge.on("stateChange", function(challengeState) {
+			if(state === "challengeComplete") {
+				challenge.player.addPoints(challenge.points);
+				nextChallenge();	
+			}
+			if(state === "challengeTimeout") {
+				nextChallenge();	
+			}
 		}.bind(this));
 		challenge.activate();
+	}.bind(this);
+
+	var finishGame = function() {
+		this.finishTime = moment();
+		updateGameState("finished");
 	}.bind(this);
 
 	var nextChallenge = function() {
 		this.currentChallenge++;
 		if(this.currentChallenge >= this.numberOfChallenges) {
-			updateGameState("finished");
+			finishGame();
 		} else {
 			activateChallenge(this.currentChallenge);
 		}
 	}.bind(this);
-	
-	function generateChallenges() {
-	}
 };
 
 var GameManager = function() {
@@ -65,6 +72,12 @@ var GameManager = function() {
 		var newGame = new Game(options);
 		this.games.push(newGame);
 		this.emit("newGame", newGame);
+	}.bind(this);
+
+	this.getGameFor = function(name) {
+		return this.games.find(function(game) {
+			return game.name === name;
+		});
 	}.bind(this);
 };
 
