@@ -9,6 +9,7 @@ var Game = function(options) {
 	this.assets = options.assets;
 	this.players = options.players;
 	this.numberOfChallenges = options.numberOfChallenges;
+	this.challengeDelayTime = options.challengeDelayTime || 1000;
 	
 	this.challenges = [];
 	this.currentChallenge = 0;
@@ -33,7 +34,7 @@ var Game = function(options) {
 	};
 
 	var updateGameState = function(newState) {
-		this.emit("gameStateChage", newState);
+		this.emit("gameStateChange", newState);
 		this.state = newState;
 	}.bind(this);
 
@@ -41,7 +42,7 @@ var Game = function(options) {
 		challenge.on("stateChange", function(challengeState) {
 			if(challengeState === "challengeComplete") {
 				challenge.player.addPoints(challenge.points);
-				nextChallenge();
+				setTimeout(nextChallenge, this.challengeDelayTime);
 			}
 			if(challengeState === "challengeTimeout") {
 				nextChallenge();
