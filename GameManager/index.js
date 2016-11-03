@@ -60,7 +60,7 @@ var GameManager = function() {
 	this.createGame = function(options) {
 		var newGame = new Game(options);
 		this.games.push(newGame);
-		this.emit(newGame);
+		this.emit("newGame", newGame);
 	}.bind(this);
 };
 
