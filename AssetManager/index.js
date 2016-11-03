@@ -12,7 +12,7 @@ var AssetManager = function() {
 	this.getAssetFor = function(assetId) {
 		return this.assets.find(function(asset) {
 			return asset.assetId == assetId;
-		});
+		}.bind(this));
 	};
 
 	client.on('connect', function () {
