@@ -19,7 +19,7 @@
 				    	Number of challenges: <span data-bind="text:numberOfChallenges"></span>
 				    	<ul data-bind="foreach:challenges">
 				    		<li>
-				    			<span data-bind="text:name"></span>: <span data-bind="text:state"></span> (asset: <span data-bind="text:asset"></span>)
+				    			<span data-bind="text:name"></span>: asset <span data-bind="text:asset.assetId"></span> (<span data-bind="text:asset.type"></span>) - <span data-bind="text:state"></span> 
 				    		</li>
 				    	</ul>
 				    </p>
@@ -195,9 +195,20 @@
 		  	this.numberOfChallenges = data.numberOfChallenges;
 		  	this.state = ko.observable(data.state);
 
-		  	this.players = data.players;
-		  	this.assets = data.assets;
-		  	this.challenges = data.challenges;
+		  	this.players = data.players.map(function(playerData) {
+		  		return players.find(function(player) {
+		  			return player.name === playerData.name;
+		  		});
+		  	});
+		  	this.assets = data.assets.map(function(assetData) {
+		  		return assets.find(function(asset) {
+		  			return asset.assetId === assetData.assetId;
+		  		});
+		  	});
+
+		  	this.challenges = data.challenges.map(function(challegeData) {
+		  		return new Challenge(challegeData);
+		  	});
 
 		  	this.startGame = function() {
 		  		socket.emit('clientEvent', { action: 'startGame', gameName: this.name });
@@ -206,11 +217,18 @@
 
 		  var Challenge = function(data) {
 		  	this.name = data.name;
-		  	this.asset = data.asset;
 		  	this.timeLimit = data.timeLimit;
-		  	this.player = data.player;
 		  	this.points = data.points;
-		  	this.state = ko.observable();
+
+		  	this.asset = assets.find(function(asset) { 
+		  		return asset.assetId === data.asset.assetId;
+		  	});
+		  		
+				this.player = players.find(function(player) {
+					return player.name === data.player.name;
+				});
+
+		  	this.state = ko.observable(data.state);
 		  };
 
 			var joysticks = ko.observableArray([]);
