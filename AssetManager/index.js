@@ -7,7 +7,7 @@ var AssetManager = function() {
 	// This should be configed externally.
 	var client = mqtt.connect('mqtt://192.168.1.124');
 
-	var assets = [];
+	this.assets = [];
 
 	this.getAssetFor = function(assetId) {
 		return this.assets.find(function(asset) {
