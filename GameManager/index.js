@@ -5,6 +5,7 @@ var Game = function(options) {
 	var Challenge = require("../Challenge");
 	var moment = require("moment");
 
+	this.name = options.name || "default";
 	this.assets = options.assets;
 	this.players = options.players;
 	this.numberOfChallenges = options.numberOfChallenges;
@@ -20,15 +21,18 @@ var Game = function(options) {
 		this.challenges.push(newChallenge);
 	}
 
-	
-
 	this.start = function() {
 		if(this.state == "init") {
 			this.startTime = moment();
 			activateChallenge(this.challenges[this.currentChallenge]);
-			this.state = "started";
+			updateGameState("started");
 		}
 	};
+
+	var updateGameState = function(newState) {
+		this.emit("gameStateChage", newState);
+		this.state = newState;
+	}.bind(this);
 
 	var activateChallenge = function(challenge) {
 		challenge.on("challengeComplete", function() {
@@ -44,7 +48,7 @@ var Game = function(options) {
 	var nextChallenge = function() {
 		this.currentChallenge++;
 		if(this.currentChallenge >= this.numberOfChallenges) {
-			this.state = "finished";
+			updateGameState("finished");
 		} else {
 			activateChallenge(this.currentChallenge);
 		}

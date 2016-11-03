@@ -15,9 +15,16 @@
 					<span data-bind="text:numberOfChallenges"></span>
 				</li>
 			</ul>
-
+			<h5>New game</h5>
 			<form data-bind="with:newGame">
-				<input type="text" id="newGameNumberOfChallenges" data-bind="value:numberOfChallenges" />
+				<div class="form-group">
+			    <label for="newGameName">Game name</label>
+			    <input type="text" id="newGameName" data-bind="value:name" class="form-control" />
+			  </div>
+				<div class="form-group">
+			    <label for="newGameNumberOfChallenges">Number of challenges</label>
+			    <input type="text" id="newGameNumberOfChallenges" data-bind="value:numberOfChallenges" class="form-control" />
+			  </div>
 			</form>
 			<button class="btn btn-primary" data-bind="click:createGame">Create Game</button>
 
@@ -29,8 +36,13 @@
 				</li>
 			</ul>
 
+			<h5>New player</h5>
 			<form data-bind="with:newPlayer">
-				<input type="text" id="newPlayerName" data-bind="value:name" />
+				<div class="form-group">
+			    <label for="newPlayerName">Name</label>
+			    <input type="text" id="newPlayerName" data-bind="value:name" class="form-control" />
+			  </div>
+				
 			</form>
 			<button class="btn btn-primary" data-bind="click:createPlayer">Create Player</button>
 
@@ -161,8 +173,13 @@
 		  };
 
 		  var Game = function(data) {
+		  	this.name = data.name;
 		  	this.numberOfChallenges = data.numberOfChallenges;
-		  	this.state = data.state || "Unknown";
+		  	this.state = ko.observable(data.state);
+
+		  	this.players = data.players;
+		  	this.assets = data.assets;
+		  	this.challenges = data.challenges;
 		  };
 
 			var joysticks = ko.observableArray([]);
@@ -181,7 +198,8 @@
 			};
 
 			var newGame = {
-				numberOfChallenges: ko.observable()
+				numberOfChallenges: ko.observable(),
+				name: ko.observable()
 			};
 
 			var createGame = function() {
@@ -221,6 +239,16 @@
 		  socket.on("newGame", function(data) {
 		  	console.log("FRONT got new game", data);
 		  	games.push(new Game(data));
+		  });
+
+		  socket.on("gameStateChange", function(data) {
+		  	var name = data.split("|")[0];
+		  	var state = data.split("|")[1];
+
+		  	var game = games().find(function(game) {
+		  		return game.name === name;
+		  	});
+		  	game.state(state);
 		  });
 
 		  // ASSETS

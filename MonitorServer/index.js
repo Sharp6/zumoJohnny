@@ -83,6 +83,10 @@ var MonitorServer = function(joysticks,robots,managers) {
 
 	managers.gameManager.on("newGame", function(game) {
 		io.emit("newGame", game);
+
+		game.on("gameStateChange", function(state) {
+			io.emit("gameStateChange", game.name + "|" + state);
+		});
 	});
 
 	managers.playerManager.on("newPlayer", function(player) {
