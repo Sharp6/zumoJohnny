@@ -36,10 +36,11 @@ var AssetManager = function() {
 
 		if(data.assetId && data.update && data.update == "disconnected") {
 			var discAsset = this.assets.find(function(asset) {
-				return asset.assetId == data.assetId;
+				return asset.assetId === data.assetId;
 			});
 
 			if(discAsset) {
+				console.log("Removing asset with assetId", discAsset.assetId);
 				discAsset.emit("assetDisconnected", "sadly");
 				this.assets.splice(this.assets.indexOf(discAsset), 1);
 			}
