@@ -7,95 +7,90 @@
 
 	<body>
 		<div class="container">
-			<div class="row">
 
-				<h1>Assets</h1>
-				<ul data-bind="foreach:assets">
-					<li>
-						<span data-bind="text:assetId"></span> (<span data-bind="text:type"></span>): <span data-bind="text:state"></span>.
-					</li>
-				</ul>
-			</div>
-			<div class="row">
-				<h1>Joystick mappings</h1>
+			<h1>Assets</h1>
+			<ul data-bind="foreach:assets">
+				<li>
+					<span data-bind="text:assetId"></span> (<span data-bind="text:type"></span>): <span data-bind="text:state"></span>.
+				</li>
+			</ul>
 
-				<div id="joysticks" data-bind="foreach:joysticks">
-					<div class="row">
-						<div class="col-s-6">
-							<h3 data-bind="text:name"></h3>
-							<form>
-								<div class="input-field">
-									<select data-bind="options:$parent.robots, optionsText: 'name', value: selectedRobot, optionsCaption: 'Select robot...'" class="browser-default" id="robotSelect"></select>
-									<label for="robotSelect">Choose your bot</label>
-								</div>
-							</form>
-							<p>
-								<br />
-								Mapped robot: <span data-bind="text:mappedRobot()? mappedRobot().name : 'none'"></span>
-							</p>
-							<button class="btn btn-default" data-bind="click:requestMapping">Map me!</button>
-							<button class="btn btn-default" data-bind="click:requestMapRemoval">Remove mapping</button>
-							<button class="btn btn-default" data-bind="click:monitorJoystick">Monitor joystick</button>
-						</div>
+			
+			<h1>Joystick mappings</h1>
+			<div class="row" id="joysticks" data-bind="foreach:joysticks">
+					<div class="col-s-6">
+						<h3 data-bind="text:name"></h3>
+						<form>
+							<div class="input-field">
+								<select data-bind="options:$parent.robots, optionsText: 'name', value: selectedRobot, optionsCaption: 'Select robot...'" class="browser-default" id="robotSelect"></select>
+								<label for="robotSelect">Choose your bot</label>
+							</div>
+						</form>
+						<p>
+							<br />
+							Mapped robot: <span data-bind="text:mappedRobot()? mappedRobot().name : 'none'"></span>
+						</p>
+						<button class="btn btn-default" data-bind="click:requestMapping">Map me!</button>
+						<button class="btn btn-default" data-bind="click:requestMapRemoval">Remove mapping</button>
+						<button class="btn btn-default" data-bind="click:monitorJoystick">Monitor joystick</button>
 					</div>
 				</div>
-			<div>
-
-			<div class="row">
-				<h1>Monitoring</h1>
-
-				<table class="table">
-					<tr class="titleRow">
-						<th colspan="3">
-							Firebutton
-						</th>
-					</tr>
-					<tr>
-						<th class="joystickLabel">State</th>
-						<td colspan="2"><span id="fireButton">init</span></td>
-					</tr>
-
-					<tr class="titleRow">
-						<th colspan="3">
-							Joystick
-						</th>
-					</tr>
-					<tr>
-						<th></th>
-						<th>X</th>
-						<th>Y</th>
-					</tr>
-				
-					<tr>
-						<th class="joystickLabel">Raw Position</td>
-						<td><span id="xPosRaw">init</span></td>
-						<td><span id="yPosRaw">init</span></td>
-					</tr>
-
-					<tr>
-						<th class="joystickLabel">Normalized Position</td>
-						<td><span id="xPosNorm">init</span></td>
-						<td><span id="yPosNorm">init</span></td>
-					</tr>
-
-					<tr>
-						<th class="joystickLabel">Stick Extremes</td>
-						<td><span id="xMin">init</span> - <span id="xMax">init</span></td>
-						<td><span id="yMin">init</span> - <span id="yMax">init</span></td>
-					</tr>
-
-					<tr class="titleRow">
-						<th colspan="3">
-							P5.js
-						</th>
-					</tr>
-					<tr>
-						<td colspan="3" id="sketchCell"></td>
-					</tr>
-					
-				</table>
 			</div>
-		</div>
+			
+			<h1>Monitoring</h1>
+
+			<table class="table">
+				<tr class="titleRow">
+					<th colspan="3">
+						Firebutton
+					</th>
+				</tr>
+				<tr>
+					<th class="joystickLabel">State</th>
+					<td colspan="2"><span id="fireButton">init</span></td>
+				</tr>
+
+				<tr class="titleRow">
+					<th colspan="3">
+						Joystick
+					</th>
+				</tr>
+				<tr>
+					<th></th>
+					<th>X</th>
+					<th>Y</th>
+				</tr>
+			
+				<tr>
+					<th class="joystickLabel">Raw Position</td>
+					<td><span id="xPosRaw">init</span></td>
+					<td><span id="yPosRaw">init</span></td>
+				</tr>
+
+				<tr>
+					<th class="joystickLabel">Normalized Position</td>
+					<td><span id="xPosNorm">init</span></td>
+					<td><span id="yPosNorm">init</span></td>
+				</tr>
+
+				<tr>
+					<th class="joystickLabel">Stick Extremes</td>
+					<td><span id="xMin">init</span> - <span id="xMax">init</span></td>
+					<td><span id="yMin">init</span> - <span id="yMax">init</span></td>
+				</tr>
+
+				<tr class="titleRow">
+					<th colspan="3">
+						P5.js
+					</th>
+				</tr>
+				<tr>
+					<td colspan="3" id="sketchCell"></td>
+				</tr>
+				
+			</table>
+		</div> <!-- Container //-->
+		
 		
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="/libraries/jquery.js"></script>
