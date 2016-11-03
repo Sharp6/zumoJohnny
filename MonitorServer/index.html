@@ -336,7 +336,9 @@
 		  	var asset = assets().find(function(asset) {
 		  		return asset.assetId === assetId;
 		  	});
-		  	assets.splice(assets.indexOf(asset), 1);
+		  	if(asset) {
+		  		assets.splice(assets.indexOf(asset), 1);	
+		  	}
 		  });
 
 			var vm = {
