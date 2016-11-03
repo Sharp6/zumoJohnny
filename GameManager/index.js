@@ -9,6 +9,13 @@ var Game = function(options) {
 	this.players = options.players;
 	this.numberOfChallenges = options.numberOfChallenges;
 
+	for(var i = 0; i < this.numberOfChallenges; i++) {
+		var selectedAsset = this.assets[Math.floor(Math.random() * this.assets.length)];
+		var timeLimit = 30;
+		var newChallenge = new Challenge({asset: selectedAsset, timeLimit: timeLimit});
+		this.challenges.push(newChallenge);
+	}
+
 	this.state = "init";
 
 	this.challenges = [];
@@ -45,12 +52,6 @@ var Game = function(options) {
 	}.bind(this);
 	
 	function generateChallenges() {
-		for(var i = 0; i < this.numberOfChallenges; i++) {
-			var selectedAsset = this.assets[Math.floor(Math.random() * this.assets.length)];
-			var timeLimit = 30;
-			var newChallenge = new Challenge({asset: selectedAsset, timeLimit: timeLimit});
-			this.challenges.push(newChallenge);
-		}
 	}
 };
 
