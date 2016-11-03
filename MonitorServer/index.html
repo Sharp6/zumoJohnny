@@ -177,7 +177,7 @@
 
 			var createPlayer = function() {
 				console.log("CREATING PLAYER", { name: newPlayer.name() });
-				socket.emit('createPlayer', { name: newPlayer.name() });
+				socket.emit('clientEvent', { action: 'createPlayer', name: newPlayer.name() });
 			};
 
 			var newGame = {
@@ -185,7 +185,7 @@
 			};
 
 			var createGame = function() {
-				socket.emit('createGame', { assets: assets(), players: players(), numberOfChallenges: newGame.numberOfChallenges() });
+				socket.emit('clientEvent', { action:'createGame', assets: assets(), players: players(), numberOfChallenges: newGame.numberOfChallenges() });
 			};
 
 		  socket.on("joysticks", function(data) {
