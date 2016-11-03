@@ -44,14 +44,14 @@ var Game = function(options) {
 		}
 	}.bind(this);
 	
-	var generateChallenges = function() {
+	function generateChallenges() {
 		for(var i = 0; i < this.numberOfChallenges; i++) {
 			var selectedAsset = this.assets[Math.floor(Math.random() * this.assets.length)];
 			var timeLimit = 30;
 			var newChallenge = new Challenge({asset: selectedAsset, timeLimit: timeLimit});
 			this.challenges.push(newChallenge);
 		}
-	};
+	}
 };
 
 var GameManager = function() {
