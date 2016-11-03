@@ -1,3 +1,4 @@
+"use strict";
 function Asset(data) {
 	var mqtt = require('mqtt');
 	var assetClient = mqtt.connect('mqtt://192.168.1.124');

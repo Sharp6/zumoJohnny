@@ -39,12 +39,12 @@ var Game = function(options) {
 
 	var activateChallenge = function(challenge) {
 		challenge.on("stateChange", function(challengeState) {
-			if(state === "challengeComplete") {
+			if(challengeState === "challengeComplete") {
 				challenge.player.addPoints(challenge.points);
-				nextChallenge();	
+				nextChallenge();
 			}
-			if(state === "challengeTimeout") {
-				nextChallenge();	
+			if(challengeState === "challengeTimeout") {
+				nextChallenge();
 			}
 		}.bind(this));
 		challenge.activate();
