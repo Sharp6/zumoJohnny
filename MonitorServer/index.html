@@ -12,9 +12,19 @@
 
 			<div data-bind="foreach:games">
 				<div class="panel panel-default">
-				  <div class="panel-heading"><span data-bind="text:name"></span></div>
+				  <div class="panel-heading"><span data-bind="text:name"></span> - <span data-bind="text:state"></span></div>
 				  <div class="panel-body">
-				  	<button class="btn btn-default" data-bind="click:startGame">Start game</button>
+				  	<p>
+				  		<button class="btn btn-default" data-bind="click:startGame">Start game</button>
+				  	</p>
+				  	<p>
+				  		Players:
+				  		<ul data-bind="foreach:players">
+				  			<li>
+				  				<span data-bind="text:name"></span>: <span data-bind="text:score"></span>
+				  			</li>
+				  		</ul>
+				  	</p>
 				    <p>
 				    	Number of challenges: <span data-bind="text:numberOfChallenges"></span>
 				    	<ul data-bind="foreach:challenges">
@@ -187,7 +197,7 @@
 
 		  var Player = function(data) {
 		  	this.name = data.name;
-		  	this.score = data.score || "Unknown";
+		  	this.score = ko.observable(data.score);
 		  };
 
 		  var Game = function(data) {
@@ -282,6 +292,16 @@
 		  socket.on("newPlayer", function(data) {
 		  	console.log("FRONT got new player", data);
 		  	players.push(new Player(data));
+		  });
+
+		  socket.on("playerScoreUpdate", function(data) {
+		  	var playerName = data.split("|")[0];
+		  	var score = data.split("|")[1];
+
+		  	var player = players().find(function(player) {
+		  		return player.name === playerName;
+		  	});
+		  	player.score(score);
 		  });
 
 		  // GAMES

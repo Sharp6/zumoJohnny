@@ -20,6 +20,7 @@ var Challenge = function(options) {
 	}.bind(this));
 
 	this.activate = function() {
+		this.asset.activate();
 		this.activationTime = moment();
 		this.state = "active";
 		this.emit("stateChange", "activated");

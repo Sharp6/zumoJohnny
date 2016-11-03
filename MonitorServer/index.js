@@ -63,7 +63,7 @@ var MonitorServer = function(joysticks,robots,managers) {
 			var assets = data.assets.map(function(asset) {
 				return managers.assetManager.getAssetFor(asset.assetId);
 			});
-			
+
 			if(assets.length > 0 && players.length > 0) {
 				managers.gameManager.createGame({name: data.name, numberOfChallenges: data.numberOfChallenges, players: players, assets: assets });
 			}
@@ -101,6 +101,10 @@ var MonitorServer = function(joysticks,robots,managers) {
 
 	managers.playerManager.on("newPlayer", function(player) {
 		io.emit("newPlayer", player);
+
+		player.on("playerScoreUpdate", function(score) {
+			io.emit("playerScoreUpdate", player.name + "|" + score);
+		});
 	});
 
 	assetManager.on("newAsset", function(asset) {

@@ -13,6 +13,10 @@ function Asset(data) {
 	this.inTopic = "oBots/assets/" + data.assetId + "/fromAsset";
 	this.outTopic = "oBots/assets/" + data.assetId + "/fromServer";
 
+	this.activate = function() {
+		assetClient.publish(this.outTopic, "state:armed");
+	};
+
 	assetClient.on('message', function(topic, message) {
 		console.log("Got assetMessage", message.toString(), "on topic", topic);
 		var msgObj = {};
