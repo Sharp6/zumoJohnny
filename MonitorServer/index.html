@@ -196,12 +196,12 @@
 		  	this.state = ko.observable(data.state);
 
 		  	this.players = data.players.map(function(playerData) {
-		  		return players.find(function(player) {
+		  		return players().find(function(player) {
 		  			return player.name === playerData.name;
 		  		});
 		  	});
 		  	this.assets = data.assets.map(function(assetData) {
-		  		return assets.find(function(asset) {
+		  		return assets().find(function(asset) {
 		  			return asset.assetId === assetData.assetId;
 		  		});
 		  	});
@@ -220,11 +220,11 @@
 		  	this.timeLimit = data.timeLimit;
 		  	this.points = data.points;
 
-		  	this.asset = assets.find(function(asset) { 
+		  	this.asset = assets().find(function(asset) { 
 		  		return asset.assetId === data.asset.assetId;
 		  	});
 		  		
-				this.player = players.find(function(player) {
+				this.player = players().find(function(player) {
 					return player.name === data.player.name;
 				});
 
