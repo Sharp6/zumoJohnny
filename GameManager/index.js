@@ -61,7 +61,7 @@ var GameManager = function() {
 		var newGame = new Game(options);
 		games.push(newGame);
 		this.emit(newGame);
-	});
+	};
 };
 
 GameManager.prototype = Object.create(require('events').EventEmitter.prototype);
