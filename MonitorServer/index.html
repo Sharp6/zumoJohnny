@@ -253,7 +253,7 @@
 
 			var createGame = function() {
 				console.log("CREATING GAME", { action:'createGame', assets: assets(), players: players(), numberOfChallenges: newGame.numberOfChallenges() });
-				socket.emit('clientEvent', { action:'createGame', assets: assets(), players: players(), numberOfChallenges: newGame.numberOfChallenges() });
+				socket.emit('clientEvent', { action:'createGame', assets: assets(), players: players(), numberOfChallenges: newGame.numberOfChallenges(), name: newGame.name() });
 			};
 
 		  socket.on("joysticks", function(data) {
