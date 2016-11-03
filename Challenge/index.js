@@ -6,7 +6,7 @@ var Challenge = function(options) {
 
 	this.name = options.name;
 	this.asset = options.asset;
-	this.timeLimit = options.timeLimit || 30;
+	this.timeLimit = options.timeLimit || 10;
 	this.player = options.player;
 	this.points = options.points || 10;
 	this.state = "init";

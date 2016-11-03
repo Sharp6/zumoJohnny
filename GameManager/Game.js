@@ -60,7 +60,7 @@ var Game = function(options) {
 		if(this.currentChallenge >= this.numberOfChallenges) {
 			finishGame();
 		} else {
-			activateChallenge(this.currentChallenge);
+			activateChallenge(this.challenges[this.currentChallenge]);
 		}
 	}.bind(this);
 };
