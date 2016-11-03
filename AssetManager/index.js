@@ -36,6 +36,12 @@ var AssetManager = function() {
 
 	var assets = [];
 
+	this.getAssetFor = function(assetId) {
+		return this.assets.find(function(asset) {
+			return asset.assetId == assetId;
+		});
+	};
+
 	client.on('connect', function () {
 		client.subscribe('oBots/assets');
 	});

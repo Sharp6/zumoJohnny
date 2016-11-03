@@ -12,6 +12,12 @@ var PlayerManager = function() {
 		this.players.push(newPlayer);
 		this.emit("newPlayer", newPlayer);
 	};
+
+	this.getPlayerFor = function(name) {
+		return this.players.find(function(player) {
+			return player.name == name;
+		});
+	}.bind(this);
 };
 
 PlayerManager.prototype = Object.create(require('events').EventEmitter.prototype);

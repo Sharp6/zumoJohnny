@@ -55,7 +55,18 @@ var MonitorServer = function(joysticks,robots,managers) {
 			this.emit('requestMapRemoval', { joystickName: data.joystick });
 		}.bind(this),
 		createGame: function(data, socket) {
-			managers.gameManager.createGame(data);
+			// Get player objects
+			var players = data.players.map(function(player) {
+				return managers.playerManager.getPlayerFor(player.name);
+			});
+			// Get asset objects
+			var assets = data.assets.map(function(asset) {
+				return managers.assetManager.getAssetFor(asset.assetId);
+			});
+
+			if(assets.length > 0 && players.length > 0) {
+				managers.gameManager.createGame({numberOfChallenges: data.numberOfChallenges, players: players, assets: assets });
+			}
 		},
 		createPlayer: function(data, socket) {
 			managers.playerManager.createPlayer(data);
