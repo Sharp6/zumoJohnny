@@ -54,10 +54,10 @@ var Game = function(options) {
 	};
 };
 
-var GameManager = function(monitorServer) {
+var GameManager = function() {
 	var games = [];
 
-	monitorServer.on("createGame", function(options) {
+	this.createGame = function(options) {
 		var newGame = new Game(options);
 		games.push(newGame);
 		this.emit(newGame);

@@ -1,3 +1,4 @@
+"use strict";
 var fs = require('fs');
 
 var five = require("johnny-five");
@@ -5,6 +6,8 @@ var five = require("johnny-five");
 var MapperCentral = require('./MapperCentral');
 var MonitorServer = require('./MonitorServer');
 var AssetManager = require('./AssetManager');
+var GameManager = require('./GameManager');
+var PlayerManager = require('./PlayerManager');
 var ZumoBot = require("./zumoBot");
 //var AtariJoystick = require("./AtariJoystick");
 //var Ps3Joystick = require("./ps3Joystick");
@@ -20,9 +23,13 @@ var joysticks = [];
 var monitor;
 var mapper;
 var assetManager;
+var playerManager;
+var gameManager;
 
 initBoards()
   .then(initAssetManager)
+  .then(initPlayerManager)
+  .then(initGameManager)
   .then(initMonitor)
   .then(initMapper)
   .then(function() {
@@ -58,7 +65,7 @@ function initBoards() {
 
 function initMonitor() {
   return new Promise(function(resolve,reject) {
-    monitor = new MonitorServer(joysticks, robots, assetManager);
+    monitor = new MonitorServer(joysticks, robots, { assetManager: assetManager, gameManager: gameManager, playerManager: playerManager });
     resolve();
   });
 }
@@ -73,6 +80,20 @@ function initMapper() {
 function initAssetManager() {
   return new Promise(function(resolve,reject) {
     assetManager = new AssetManager();
+    resolve();
+  });
+}
+
+function initGameManager() {
+  return new Promise(function(resolve,reject) {
+    gameManager = new GameManager();
+    resolve();
+  });
+}
+
+function initPlayerManager() {
+  return new Promise(function(resolve,reject) {
+    playerManager = new PlayerManager();
     resolve();
   });
 }

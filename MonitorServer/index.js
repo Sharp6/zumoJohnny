@@ -1,5 +1,5 @@
 "use strict";
-var MonitorServer = function(joysticks,robots,assetManager) {
+var MonitorServer = function(joysticks,robots,managers) {
 	var express = require('express');
 	var path = require('path');
 	var app = express();
@@ -9,6 +9,8 @@ var MonitorServer = function(joysticks,robots,assetManager) {
 		res.sendFile(__dirname +'/index.html');
 	});
 	app.use(express.static(path.join(__dirname, 'public')));
+
+	var assetManager = managers.assetManager;
 
 	function moveCallback(state) {
 		io.emit("stickExtremesReport", state.extremes);
@@ -51,7 +53,13 @@ var MonitorServer = function(joysticks,robots,assetManager) {
 		}.bind(this),
 		requestMapRemoval: function(data) {
 			this.emit('requestMapRemoval', { joystickName: data.joystick });
-		}.bind(this)
+		}.bind(this),
+		createGame: function(data, socket) {
+			managers.gameManager.createGame(data);
+		},
+		createPlayer: function(data, socket) {
+			managers.playerManager.createPlayer(data);
+		}
 	};
 
 	var joystickNames = joysticks.map(function(joystick) {
@@ -60,6 +68,14 @@ var MonitorServer = function(joysticks,robots,assetManager) {
 
 	var robotNames = robots.map(function(robot) {
 		return robot.name;
+	});
+
+	managers.gameManager.on("newGame", function(game) {
+		io.emit("newGame", game);
+	});
+
+	managers.playerManager.on("newPlayer", function(player) {
+		io.emit("newPlayer", player);
 	});
 
 	assetManager.on("newAsset", function(asset) {

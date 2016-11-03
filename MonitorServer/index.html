@@ -8,6 +8,33 @@
 	<body>
 		<div class="container">
 
+			<h1>Games</h1>
+
+			<ul data-bind="foreach:games">
+				<li>
+					<span data-bind="text:numberOfChallenges"></span>
+				</li>
+			</ul>
+
+			<form data-bind="with:newGame">
+				<input type="text" id="newGameNumberOfChallenges" data-bind="value:numberOfChallenges" />
+				<button type="btn btn-primary" data-bind="click:createGame">Create Game</button>
+			</form>
+
+			<h1>Players</h1>
+
+			<ul data-bind="foreach:players">
+				<li>
+					<span data-bind="text:name"></span>
+				</li>
+			</ul>
+
+			<form data-bind="with:newPlayer">
+				<input type="text" id="newPlayerName" data-bind="value:name" />
+				<button type="btn btn-primary" data-bind="click:createPlayer">Create Player</button>
+			</form>
+
+
 			<h1>Assets</h1>
 			<ul data-bind="foreach:assets">
 				<li>
@@ -98,6 +125,7 @@
 		<script src="/libraries/knockout.js"></script>
 
 		<script>
+			"use strict";
 		  var socket = io();
 		  var canvas;
 
@@ -127,9 +155,37 @@
 		  	this.state = ko.observable("Unknown state");
 		  };
 
+		  var Player = function(data) {
+		  	this.name = data.name;
+		  	this.score = data.score || "Unknown";
+		  };
+
+		  var Game = function(data) {
+		  	this.numberOfChallenges = data.numberOfChallenges;
+		  	this.state = data.state || "Unknown";
+		  };
+
 			var joysticks = ko.observableArray([]);
 			var robots = ko.observableArray([]);
 			var assets = ko.observableArray([]);
+			var players = ko.observableArray([]);
+			var games = ko.observableArray([]);
+
+			var newPlayer = {
+				name: ko.observable()
+			};
+
+			var createPlayer = function() {
+				socket.emit('createPlayer', { name: newPlayer.name() });
+			};
+
+			var newGame = {
+				numberOfChallenges: ko.observable()
+			};
+
+			var createGame = function() {
+				socket.emit('createGame', { assets: assets(), players: players(), numberOfChallenges: newGame.numberOfChallenges() });
+			};
 
 		  socket.on("joysticks", function(data) {
 		  	data.names.forEach(function(name) {
@@ -151,6 +207,18 @@
 		  		return robot.name === data.robotName;
 		  	});
 		  	currentJoystick.mappedRobot(currentRobot);
+		  });
+
+		  // PLAYERS
+		  socket.on("newPlayer", function(data) {
+		  	console.log("FRONT got new player", data);
+		  	players.push(new Player(data));
+		  });
+
+		  // GAMES
+		  socket.on("newGame", function(data) {
+		  	console.log("FRONT got new game", data);
+		  	games.push(new Game(data));
 		  });
 
 		  // ASSETS
