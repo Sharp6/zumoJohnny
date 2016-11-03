@@ -8,6 +8,10 @@ var Game = function(options) {
 	this.assets = options.assets;
 	this.players = options.players;
 	this.numberOfChallenges = options.numberOfChallenges;
+	
+	this.challenges = [];
+	this.currentChallenge = 0;
+	this.state = "init";
 
 	for(var i = 0; i < this.numberOfChallenges; i++) {
 		var selectedAsset = this.assets[Math.floor(Math.random() * this.assets.length)];
@@ -16,12 +20,7 @@ var Game = function(options) {
 		this.challenges.push(newChallenge);
 	}
 
-	this.state = "init";
-
-	this.challenges = [];
-	generateChallenges();
-
-	this.currentChallenge = 0;
+	
 
 	this.start = function() {
 		if(this.state == "init") {
@@ -56,13 +55,13 @@ var Game = function(options) {
 };
 
 var GameManager = function() {
-	var games = [];
+	this.games = [];
 
 	this.createGame = function(options) {
 		var newGame = new Game(options);
-		games.push(newGame);
+		this.games.push(newGame);
 		this.emit(newGame);
-	};
+	}.bind(this);
 };
 
 GameManager.prototype = Object.create(require('events').EventEmitter.prototype);
