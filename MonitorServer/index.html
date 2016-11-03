@@ -1,9 +1,8 @@
 <html>
 	<head>
 		<title>Monitor Server J5 Zumo Robot System</title>
-		<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-		<link rel='stylesheet' href='/stylesheets/monitor.css' />
-		<link rel='stylesheet' href='/stylesheets/materialize.min.css' />
+		
+		<link rel='stylesheet' href='/stylesheets/bootstrap.css' />
 	</head>
 
 	<body>
@@ -100,7 +99,7 @@
 		
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="/libraries/jquery.js"></script>
-		<script src="/libraries/materialize.min.js"></script>
+		<script src="/libraries/bootstrap.min.js"></script>
 		<script src="/libraries/p5.js"></script>
 		<script src="/libraries/knockout.js"></script>
 
@@ -148,7 +147,6 @@
 		  	data.names.forEach(function(name) {
 		  		robots.push(new Robot(name));
 		  	});
-		  	$('select').material_select();
 		  });
 
 		  socket.on("bindingNotification", function(data) {
@@ -190,12 +188,6 @@
 				assets: assets
 			};
 			ko.applyBindings(vm);
-			$(document).ready(function() {
-		    $('select').material_select();
-		  });
-
-			// Oooh, so nasty!
-		 	$('select').material_select();
 
 		  /*
 		  $('#btn1').on('click', function (event) {
