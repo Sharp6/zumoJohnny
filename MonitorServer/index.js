@@ -65,7 +65,7 @@ var MonitorServer = function(joysticks,robots,managers) {
 			});
 
 			if(assets.length > 0 && players.length > 0) {
-				managers.gameManager.createGame({numberOfChallenges: data.numberOfChallenges, players: players, assets: assets });
+				managers.gameManager.createGame({name: data.name, numberOfChallenges: data.numberOfChallenges, players: players, assets: assets });
 			}
 		},
 		startGame: function(data, socket) {
