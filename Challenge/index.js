@@ -26,6 +26,7 @@ var Challenge = function(options) {
 		this.emit("stateChange", "activated");
 
 		this.timer = setTimeout(function(){
+			this.asset.deActivate();
 			this.state = "timeout";
 			this.emit("stateChange", "challengeTimeout");
 		}.bind(this), this.timeLimit * 1000);

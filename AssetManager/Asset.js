@@ -17,6 +17,10 @@ function Asset(data) {
 		assetClient.publish(this.outTopic, "state:armed");
 	};
 
+	this.deActivate = function() {
+		assetClient.publish(this.outTopic, "state:standby");
+	};
+
 	assetClient.on('message', function(topic, message) {
 		console.log("Got assetMessage", message.toString(), "on topic", topic);
 		var msgObj = {};
