@@ -3,6 +3,8 @@ var Game = function(options) {
 	var Challenge = require("../Challenge");
 	var moment = require("moment");
 
+	console.log("GAME MAKING GAME", options);
+
 	this.name = options.name || "default";
 	this.assets = options.assets;
 	this.players = options.players;

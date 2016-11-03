@@ -64,6 +64,8 @@ var MonitorServer = function(joysticks,robots,managers) {
 				return managers.assetManager.getAssetFor(asset.assetId);
 			});
 
+			console.log("MONITORSERVER CREATE GAME DATA", data);
+
 			if(assets.length > 0 && players.length > 0) {
 				managers.gameManager.createGame({name: data.name, numberOfChallenges: data.numberOfChallenges, players: players, assets: assets });
 			}
