@@ -39,8 +39,10 @@ var AssetManager = function() {
 				return asset.assetId == data.assetId;
 			});
 
-			discAsset.emit("assetDisconnected", "sadly");
-			assets.splice(assets.indexOf(discAsset), 1);
+			if(discAsset) {
+				discAsset.emit("assetDisconnected", "sadly");
+				assets.splice(assets.indexOf(discAsset), 1);
+			}
 		}
 		
 	}.bind(this));
