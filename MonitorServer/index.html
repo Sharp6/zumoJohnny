@@ -18,8 +18,8 @@
 
 			<form data-bind="with:newGame">
 				<input type="text" id="newGameNumberOfChallenges" data-bind="value:numberOfChallenges" />
-				<button type="btn btn-primary" data-bind="click:createGame">Create Game</button>
 			</form>
+			<button class="btn btn-primary" data-bind="click:createGame">Create Game</button>
 
 			<h1>Players</h1>
 
@@ -31,8 +31,8 @@
 
 			<form data-bind="with:newPlayer">
 				<input type="text" id="newPlayerName" data-bind="value:name" />
-				<button type="btn btn-primary" data-bind="click:createPlayer">Create Player</button>
 			</form>
+			<button class="btn btn-primary" data-bind="click:createPlayer">Create Player</button>
 
 
 			<h1>Assets</h1>
@@ -176,6 +176,7 @@
 			};
 
 			var createPlayer = function() {
+				console.log("CREATING PLAYER", { name: newPlayer.name() });
 				socket.emit('createPlayer', { name: newPlayer.name() });
 			};
 
