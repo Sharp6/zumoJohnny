@@ -64,7 +64,10 @@ var MonitorServer = function(joysticks,robots,managers) {
 				return managers.assetManager.getAssetFor(asset.assetId);
 			});
 
+			console.log("players", players, "assets", assets);
+
 			if(assets.length > 0 && players.length > 0) {
+				console.log("MonitorServer: crating game call to gameManager.");
 				managers.gameManager.createGame({numberOfChallenges: data.numberOfChallenges, players: players, assets: assets });
 			}
 		},
