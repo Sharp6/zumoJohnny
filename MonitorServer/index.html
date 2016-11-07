@@ -216,6 +216,7 @@
 						return player.name === participantData.player.name;
 					});
 					var newParticipant = new Participant({ 
+						name: participantData.name,
 						player: player,
 						score: participantData.score
 					});
