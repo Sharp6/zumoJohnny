@@ -16,7 +16,7 @@ var Game = function(options) {
 	
 	this.participants = this.players.map(function(player) {
 		return new Participant({player: player, game: this});
-	});
+	}.bind(this));
 
 	this.challenges = [];
 	this.currentChallenge = 0;
