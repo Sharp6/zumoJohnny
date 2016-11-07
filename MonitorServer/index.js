@@ -97,14 +97,21 @@ var MonitorServer = function(joysticks,robots,managers) {
 				io.emit("challengeStateChange", challenge.name + "|" + challengeState);
 			});
 		});
+
+		game.participants.forEach(function(participant) {
+			participant.on("participantScoreUpdate", function(score) {
+				io.emit("participantScoreUpdate", participant.name + "|" + score);
+			});
+		});
 	});
 
 	managers.playerManager.on("newPlayer", function(player) {
 		io.emit("newPlayer", player);
 
-		player.on("playerScoreUpdate", function(score) {
+		/*player.on("playerScoreUpdate", function(score) {
 			io.emit("playerScoreUpdate", player.name + "|" + score);
 		});
+*/
 	});
 
 	assetManager.on("newAsset", function(asset) {
