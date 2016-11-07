@@ -293,6 +293,12 @@
 		  	});
 		  });
 
+		  socket.on("assets", function(data) {
+		  	data.assets.forEach(function(assetData) {
+		  		assets.push(new Asset(assetData));
+		  	});
+		  });
+
 		  socket.on("bindingNotification", function(data) {
 		  	var currentJoystick = joysticks().find(function(joystick) {
 		  		return joystick.name === data.joystickName;

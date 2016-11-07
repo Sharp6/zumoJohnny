@@ -19,6 +19,8 @@ var AssetManager = function() {
 		client.subscribe('oBots/assets');
 	});
 
+	client.publish('oBots/assets', 'reannounce');
+
 	client.on('message', function (topic, message) {
 		var parts = message.toString().split("|");
 		var data = parts.reduce(function(data, part) {
