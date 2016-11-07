@@ -15,7 +15,7 @@ var Game = function(options) {
 	this.challengeDelayTime = options.challengeDelayTime || 1000;
 	
 	this.participants = this.players.map(function(player) {
-		return new Participant({player: player, game: this});
+		return new Participant({player: player, gameName: this.name});
 	}.bind(this));
 
 	this.challenges = [];

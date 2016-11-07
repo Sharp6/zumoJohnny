@@ -3,10 +3,10 @@
 var Participant = function(options) {
 
 	this.player = options.player;
-	this.game = options.game;
+	this.gameName = options.gameName;
 	this.points = options.points || 10;
 
-	this.name = this.game.name + "Participant" + this.player.name;
+	this.name = this.gameName + "Participant" + this.player.name;
 
 	this.addPoints = function(newPoints) {
 		this.points += newPoints;
