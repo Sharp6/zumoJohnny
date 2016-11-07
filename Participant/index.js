@@ -8,6 +8,8 @@ var Participant = function(options) {
 
 	this.name = this.gameName + "Participant" + this.player.name;
 
+	console.log("Creating participant with name", this.name);
+
 	this.addPoints = function(newPoints) {
 		this.points += newPoints;
 		this.emit("participantScoreUpdate", this.points);

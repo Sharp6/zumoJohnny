@@ -100,6 +100,7 @@ var MonitorServer = function(joysticks,robots,managers) {
 
 		game.participants.forEach(function(participant) {
 			participant.on("participantScoreUpdate", function(score) {
+				console.log("MonitorServer: Updating score for participant", participant.name);
 				io.emit("participantScoreUpdate", participant.name + "|" + score);
 			});
 		});
