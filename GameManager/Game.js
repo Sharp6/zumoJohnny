@@ -1,6 +1,9 @@
+"use strict";
+
 var Game = function(options) {
 	
 	var Challenge = require("../Challenge");
+	var Participant = require("../Participant");
 	var moment = require("moment");
 
 	console.log("GAME MAKING GAME", options);
@@ -11,15 +14,19 @@ var Game = function(options) {
 	this.numberOfChallenges = options.numberOfChallenges;
 	this.challengeDelayTime = options.challengeDelayTime || 1000;
 	
+	this.participants = this.players.map(function(player) {
+		return new Participant({player: player, game: this});
+	});
+
 	this.challenges = [];
 	this.currentChallenge = 0;
 	this.state = "init";
 
-	this.players.forEach(function(player) {
+	this.participants.forEach(function(participant) {
 		for(var i = 0; i < this.numberOfChallenges; i++) {
 			var challengeName = this.name + "Challenge" + i;
 			var selectedAsset = this.assets[Math.floor(Math.random() * this.assets.length)];
-			var newChallenge = new Challenge({ name: challengeName, asset: selectedAsset, player: player });
+			var newChallenge = new Challenge({ name: challengeName, asset: selectedAsset, participant: participant });
 			this.challenges.push(newChallenge);
 		}
 	}.bind(this));
@@ -41,7 +48,7 @@ var Game = function(options) {
 	var activateChallenge = function(challenge) {
 		challenge.on("stateChange", function(challengeState) {
 			if(challengeState === "challengeComplete") {
-				challenge.player.addPoints(challenge.points);
+				challenge.participant.addPoints(challenge.points);
 				setTimeout(nextChallenge, this.challengeDelayTime);
 			}
 			if(challengeState === "challengeTimeout") {

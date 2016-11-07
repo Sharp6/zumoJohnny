@@ -18,10 +18,10 @@
 				  		<button class="btn btn-default" data-bind="click:startGame">Start game</button>
 				  	</p>
 				  	<p>
-				  		Players:
-				  		<ul data-bind="foreach:players">
+				  		Participants:
+				  		<ul data-bind="foreach:participants">
 				  			<li>
-				  				<span data-bind="text:name"></span>: <span data-bind="text:score"></span>
+				  				<span data-bind="text:player.name"></span>: <span data-bind="text:score"></span>
 				  			</li>
 				  		</ul>
 				  	</p>
@@ -197,19 +197,32 @@
 
 		  var Player = function(data) {
 		  	this.name = data.name;
-		  	this.score = ko.observable(data.score);
+		  	this.participants = ko.observableArray([]);
 		  };
+
+		  var Participant = function(data) {
+		  	this.name = data.name;
+		  	this.player = data.player;
+		  	this.score = ko.observable(data.score);
+		  }
 
 		  var Game = function(data) {
 		  	this.name = data.name;
 		  	this.numberOfChallenges = data.numberOfChallenges;
 		  	this.state = ko.observable(data.state);
 
-		  	this.players = data.players.map(function(playerData) {
-		  		return players().find(function(player) {
-		  			return player.name === playerData.name;
-		  		});
-		  	});
+				data.participants.forEach(function(participantData) {
+					var player = players().find(function(player) {
+						return player.name === participantData.player.name;
+					});
+					var newParticipant = new Participant({ 
+						player: player,
+						score: participantData.score
+					});
+					participants.push(newParticipant);
+					player.participants.push(newParticipant);
+				});
+
 		  	this.assets = data.assets.map(function(assetData) {
 		  		return assets().find(function(asset) {
 		  			return asset.assetId === assetData.assetId;
@@ -234,8 +247,8 @@
 		  		return asset.assetId === data.asset.assetId;
 		  	});
 		  		
-				this.player = players().find(function(player) {
-					return player.name === data.player.name;
+				this.participant = participants().find(function(participant) {
+					return participant.name === data.participant.name;
 				});
 
 		  	this.state = ko.observable(data.state);
@@ -245,6 +258,7 @@
 			var robots = ko.observableArray([]);
 			var assets = ko.observableArray([]);
 			var players = ko.observableArray([]);
+			var participants = ko.observableArray([]);
 			var games = ko.observableArray([]);
 
 			var newPlayer = {
@@ -294,14 +308,16 @@
 		  	players.push(new Player(data));
 		  });
 
-		  socket.on("playerScoreUpdate", function(data) {
-		  	var playerName = data.split("|")[0];
+		  // PARTICIPANTS
+		  socket.on("participantScoreUpdate", function(data) {
+		  	var participantName = data.split("|")[0];
+		  	//var playerName = data.split("|")[0];
 		  	var score = data.split("|")[1];
 
-		  	var player = players().find(function(player) {
-		  		return player.name === playerName;
+		  	var participant = participants().find(function(participant) {
+		  		return participant.name === participantName;
 		  	});
-		  	player.score(score);
+		  	participant.score(score);
 		  });
 
 		  // GAMES
@@ -320,6 +336,7 @@
 		  	game.state(state);
 		  });
 
+		  // CHALLENGES
 		  socket.on("challengeStateChange", function(data) {
 		  	var challengeName = data.split("|")[0];
 		  	var challengeState = data.split("|")[1];
