@@ -317,7 +317,12 @@
 		  	var participant = participants().find(function(participant) {
 		  		return participant.name === participantName;
 		  	});
-		  	participant.score(score);
+		  	if(participant) {
+		  		participant.score(score);	
+		  	} else {
+		  		console.log("Cannot find participant to update score.");
+		  	}
+		  	
 		  });
 
 		  // GAMES
