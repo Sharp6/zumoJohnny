@@ -49,10 +49,10 @@ var MonitorServer = function(joysticks,robots,managers) {
 			removeListenersOf(joystick);
 		},
 		requestMapping: function(data) {
-			this.emit('requestMapping', { joystickName: data.joystick, robotName: data.robot });
+			managers.mapperRepository.requestMapping({ joystickName: data.joystick, robotName: data.robot });
 		}.bind(this),
 		requestMapRemoval: function(data) {
-			this.emit('requestMapRemoval', { joystickName: data.joystick });
+			managers.mapperRepository.requestMapRemoval({ joystickName: data.joystick });
 		}.bind(this),
 		createGame: function(data, socket) {
 			// Get player objects

@@ -21,7 +21,7 @@ var config = JSON.parse(fs.readFileSync('./zumoConfig.json').toString());
 var robots = [];
 var joysticks = [];
 var monitor;
-var mapper;
+var mapperRepo;
 var assetManager;
 var playerManager;
 var gameManager;
@@ -30,8 +30,8 @@ initBoards()
   .then(initAssetManager)
   .then(initPlayerManager)
   .then(initGameManager)
-  .then(initMonitor)
   .then(initMapper)
+  .then(initMonitor)
   .then(function() {
     console.log("Init all done!");
   })
@@ -65,14 +65,14 @@ function initBoards() {
 
 function initMonitor() {
   return new Promise(function(resolve,reject) {
-    monitor = new MonitorServer(joysticks, robots, { assetManager: assetManager, gameManager: gameManager, playerManager: playerManager });
+    monitor = new MonitorServer(joysticks, robots, { assetManager: assetManager, gameManager: gameManager, playerManager: playerManager, mapperRepository: mapperRepo });
     resolve();
   });
 }
 
 function initMapper() {
   return new Promise(function(resolve,reject) {
-    mapper = new MapperCentral(joysticks, robots, monitor);
+    mapperRepo = new MapperCentral(joysticks, robots);
     resolve();
   });
 }
