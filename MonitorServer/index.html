@@ -389,21 +389,6 @@
 		  	}
 		  });
 
-			var vm = {
-				joysticks: joysticks,
-				robots: robots,
-				assets: assets
-			};
-			ko.applyBindings(vm);
-
-		  /*
-		  $('#btn1').on('click', function (event) {
-		  	socket.emit('clientEvent', { action: 'connectJoystick' });
-		  });
-		  $('#btn2').on('click', function (event) {
-		  	socket.emit('clientEvent', { action: 'disconnectJoystick' });
-		  });
-
 		  socket.on("stickExtremesReport", function(msg) {
 		  	$('#xMin').text(msg.x.min);
 		  	$('#yMin').text(msg.y.min);
@@ -447,7 +432,13 @@
 		  }
 
 		  function draw() { }
-		  */
+		  
+		  var vm = {
+				joysticks: joysticks,
+				robots: robots,
+				assets: assets
+			};
+			ko.applyBindings(vm);
 		</script>
 
 	</body>
