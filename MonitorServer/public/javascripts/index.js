@@ -32,8 +32,11 @@ var createGame = function() {
 var newMapping = {
 	selectedJoystick: ko.observable(),
 	selectedRobot: ko.observable()
-
 }
+
+var requestMapping = function() {
+	socket.emit('clientEvent', { action: 'requestMapping', joystick: newMapping.selectedJoystick(), robot: newMapping.selectedRobot() });
+};
 
 socket.on("joysticks", function(data) {
 	data.names.forEach(function(name) {
