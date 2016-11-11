@@ -24,7 +24,7 @@ var MapperCentral = function(joysticks, robots) {
 		if(mapping) {
 			// Mapping for this joystick already exists. What should happen now?
 		} else {
-			var mappingType = mappingTypes.getAnalogToTankMapping();
+			var mappingType = mappingTypes.getAnalogToTankMapping(); // Select the mapping type
 			var newMapping = new Mapping(robot,joystick,mappingType);
 			newMapping.attachListeners();
 			if(newMapping) {

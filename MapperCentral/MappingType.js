@@ -2,8 +2,6 @@
 
 var MappingType = function() {
 	var stickMove = function(state) {
-		console.log("ZUMOMAPPER: Got a stickmove!");
-
 		// INTERNAL -------------------------------------
 		var leftMotorSpeed, rightMotorSpeed;
 
@@ -26,7 +24,37 @@ var MappingType = function() {
 		}
 
 		// EXTERNAL -------------------------------------
-		console.log("Calling the robot with", leftMotorSpeed, rightMotorSpeed);
+		this.robot.leftDirect(leftMotorSpeed);
+		this.robot.rightDirect(rightMotorSpeed);
+	};
+
+	var expoStickMove = function(state) {
+		// INTERNAL -------------------------------------
+		var leftMotorSpeed, rightMotorSpeed;
+
+		function expo(val) {
+			return Math.pow(val,3) / Math.pow(255,2);
+		}
+
+		leftMotorSpeed = rightMotorSpeed = expo(state.normalizedPosition.y);
+		leftMotorSpeed += expo(state.normalizedPosition.x);
+		rightMotorSpeed -= expo(state.normalizedPosition.x);
+
+		// This should never happen
+		if (leftMotorSpeed > 255) {
+			leftMotorSpeed = 255;
+		} else if (leftMotorSpeed < -255) {
+			leftMotorSpeed = -255;
+		}
+
+		// This should never happen
+		if (rightMotorSpeed > 255) {
+			rightMotorSpeed = 255;
+		} else if (rightMotorSpeed < -255) {
+			rightMotorSpeed = -255;
+		}
+
+		// EXTERNAL -------------------------------------
 		this.robot.leftDirect(leftMotorSpeed);
 		this.robot.rightDirect(rightMotorSpeed);
 	};
@@ -41,20 +69,11 @@ var MappingType = function() {
 
 	this.getAnalogToTankMapping = function() {
 		return {
-			stickMove: stickMove,
+			stickMove: expoStickMove,
 			fireButton: fireButton
 		};
 	};
 
-	/*
-	this.getStickMove = function() {
-		return stickMove;
-	};
-
-	this.getFireButton = function() {
-		return fireButton;
-	};
-	*/
 };
 
 module.exports = MappingType;
