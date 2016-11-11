@@ -30,8 +30,8 @@ var createGame = function() {
 };
 
 var newMapping = {
-	selectedJoystick = ko.observable(),
-	selectedRobot = ko.observable()
+	selectedJoystick: ko.observable(),
+	selectedRobot: ko.observable()
 
 }
 
