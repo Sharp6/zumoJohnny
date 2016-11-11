@@ -101,56 +101,7 @@
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="/p5.js"></script>
 
-		<script>
-		  var socket = io();
-		  var canvas;
-
-		  socket.on("stickExtremesReport", function(msg) {
-		  	$('#xMin').text(msg.x.min);
-		  	$('#yMin').text(msg.y.min);
-				$('#xMax').text(msg.x.max);
-				$('#yMax').text(msg.y.max);
-		  });
-
-		  socket.on("rawPositionReport", function(msg) {
-		  	$('#xPosRaw').text(msg.x);
-		  	$('#yPosRaw').text(msg.y);
-		  });
-
-		  socket.on("normalizedPositionReport", function(msg) {
-		  	$('#xPosNorm').text(msg.x);
-		  	$('#yPosNorm').text(msg.y);
-		  	drawCursor(msg);		  	
-		  });
-
-		  socket.on("fireButton", function(state) {
-		  	$('#fireButton').text(state);
-		  });
-
-		  function drawCursor(data) {
-		  	background(0, 0, 0);
-		  	fill(0,255,10);
-      	noStroke();
-		  	ellipse(
-		  		map(data.x, -255, 255, -100, 100),
-		  		map(data.y, -255, 255, -100, 100),
-		  		10,
-		  		10
-		  	);
-		  }
-
-		  function setup() {
-				canvas = createCanvas(200, 200);
-				canvas.parent('sketchCell');
-				background(255, 0, 200);
-
-				translate(100,100);
-		  }
-
-		  function draw() {
-
-		  }
-		</script>
+		<script src="/javascripts/index.js"></script>
 
 	</body>
 </html>
