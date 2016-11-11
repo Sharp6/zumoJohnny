@@ -2,7 +2,7 @@
 
 function Mapping(zumo, analogJoystick, mappingTypeName) {
 	console.log("MapperCentral: Doing the mapping!");
-
+	/*
 	function stickMove(state) {
 		console.log("ZUMOMAPPER: Got a stickmove!");
 
@@ -35,11 +35,18 @@ function Mapping(zumo, analogJoystick, mappingTypeName) {
 
 	function fireButton(state) {
 		if(state === "on") {
-			zumo.fire();
+			this.robot.fire();
 		} else {
-			zumo.holdFire();
+			this.robot.holdFire();
 		}
 	}
+	*/
+
+	var MappingType = require('./MappingType');
+	var mappingType = new MappingType();
+
+	var stickMove = mappingType.getStickMove();
+	var fireButton = mappingType.getFireButton();
 
 	this.joystick = analogJoystick;
 	this.robot = zumo;
