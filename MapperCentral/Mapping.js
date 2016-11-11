@@ -46,14 +46,23 @@ function Mapping(zumo, analogJoystick, mappingTypeName) {
 	this.joystickName = analogJoystick.name;
 	this.robotName = zumo.name;
 
+	this.listeners = [];
+
 	this.attachListeners = function() {
-		this.joystick.on("stickMove", stickMove);
-		this.joystick.on("fireButton", fireButton);
+		var stickMoveThis = stickMove.bind(this);
+		this.listeners.push({ eventName: "stickMove", listener: stickMoveThis });
+		this.joystick.on("stickMove", stickMoveThis);
+
+		var fireButtonThis = fireButton.bind(this);
+		this.listeners.push({ eventName: "fireButton", listener: fireButtonThis });
+		this.joystick.on("fireButton", fireButtonThis);
+		
 	}.bind(this);
 	
 	this.removeListeners = function() {
-		this.joystick.removeListener("stickMove", stickMove);
-		this.joystick.removeListener("fireButton", fireButton);
+		this.listeners.forEach(function(listener) {
+			this.joystick.removeListener(listener.eventName, listener.listener);
+		});
 	}.bind(this);
 }
 
