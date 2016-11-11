@@ -1,10 +1,12 @@
 "use strict";
 
-function Mapping(zumo, analogJoystick) {
+function Mapping(zumo, analogJoystick, mappingTypeName) {
 	console.log("MapperCentral: Doing the mapping!");
 
 	function stickMove(state) {
 		console.log("ZUMOMAPPER: Got a stickmove!");
+
+		// INTERNAL -------------------------------------
 		var leftMotorSpeed, rightMotorSpeed;
 
 		leftMotorSpeed = rightMotorSpeed = state.normalizedPosition.y;
@@ -25,9 +27,10 @@ function Mapping(zumo, analogJoystick) {
 			rightMotorSpeed = -255;
 		}
 
+		// EXTERNAL -------------------------------------
 		console.log("Calling the robot with", leftMotorSpeed, rightMotorSpeed);
-		zumo.leftDirect(leftMotorSpeed);
-		zumo.rightDirect(rightMotorSpeed);
+		this.robot.leftDirect(leftMotorSpeed);
+		this.robot.rightDirect(rightMotorSpeed);
 	}
 
 	function fireButton(state) {

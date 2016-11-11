@@ -22,7 +22,7 @@ var MapperCentral = function(joysticks, robots) {
 		if(mapping) {
 			// Mapping for this joystick already exists. What should happen now?
 		} else {
-			var newMapping = new Mapping(robot,joystick);
+			var newMapping = new Mapping(robot,joystick,data.mappingTypeName);
 			newMapping.attachListeners();
 			if(newMapping) {
 				mappings.push(newMapping);
