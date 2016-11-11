@@ -39,6 +39,14 @@ var MappingType = function() {
 		}
 	};
 
+	this.getAnalogToTankMapping = function() {
+		return {
+			stickMove: stickMove,
+			fireButton: fireButton
+		};
+	};
+
+	/*
 	this.getStickMove = function() {
 		return stickMove;
 	};
@@ -46,6 +54,7 @@ var MappingType = function() {
 	this.getFireButton = function() {
 		return fireButton;
 	};
+	*/
 };
 
 module.exports = MappingType;

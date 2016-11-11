@@ -1,6 +1,8 @@
 "use strict";
 
 var Mapping = require("./Mapping");
+var MappingType = require('./MappingType');
+var mappingTypes = new MappingType();
 
 var MapperCentral = function(joysticks, robots) {
 
@@ -22,14 +24,15 @@ var MapperCentral = function(joysticks, robots) {
 		if(mapping) {
 			// Mapping for this joystick already exists. What should happen now?
 		} else {
-			var newMapping = new Mapping(robot,joystick,data.mappingTypeName);
+			var mappingType = mappingTypes.getAnalogToTankMapping();
+			var newMapping = new Mapping(robot,joystick,mappingType);
 			newMapping.attachListeners();
 			if(newMapping) {
 				mappings.push(newMapping);
 				joystick.notifyBinding(data.robotName);
 			}
 		}
-	}
+	};
 
 
 	this.requestMapRemoval = function(data) {
@@ -44,7 +47,7 @@ var MapperCentral = function(joysticks, robots) {
 		} else {
 			// Mapping not found. What should happen now?
 		}
-	}
+	};
 };
 
 module.exports = MapperCentral;

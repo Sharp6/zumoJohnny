@@ -1,52 +1,10 @@
 "use strict";
 
-function Mapping(zumo, analogJoystick, mappingTypeName) {
+function Mapping(zumo, analogJoystick, mappingType) {
 	console.log("MapperCentral: Doing the mapping!");
-	/*
-	function stickMove(state) {
-		console.log("ZUMOMAPPER: Got a stickmove!");
 
-		// INTERNAL -------------------------------------
-		var leftMotorSpeed, rightMotorSpeed;
-
-		leftMotorSpeed = rightMotorSpeed = state.normalizedPosition.y;
-		leftMotorSpeed += state.normalizedPosition.x;
-		rightMotorSpeed -= state.normalizedPosition.x;
-
-		// This should never happen
-		if (leftMotorSpeed > 255) {
-			leftMotorSpeed = 255;
-		} else if (leftMotorSpeed < -255) {
-			leftMotorSpeed = -255;
-		}
-
-		// This should never happen
-		if (rightMotorSpeed > 255) {
-			rightMotorSpeed = 255;
-		} else if (rightMotorSpeed < -255) {
-			rightMotorSpeed = -255;
-		}
-
-		// EXTERNAL -------------------------------------
-		console.log("Calling the robot with", leftMotorSpeed, rightMotorSpeed);
-		this.robot.leftDirect(leftMotorSpeed);
-		this.robot.rightDirect(rightMotorSpeed);
-	}
-
-	function fireButton(state) {
-		if(state === "on") {
-			this.robot.fire();
-		} else {
-			this.robot.holdFire();
-		}
-	}
-	*/
-
-	var MappingType = require('./MappingType');
-	var mappingType = new MappingType();
-
-	var stickMove = mappingType.getStickMove();
-	var fireButton = mappingType.getFireButton();
+	var stickMove = mappingType.stickMove;
+	var fireButton = mappingType.fireButton;
 
 	this.joystick = analogJoystick;
 	this.robot = zumo;
