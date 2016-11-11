@@ -11,6 +11,8 @@ function Mapping(zumo, analogJoystick, mappingType) {
 	this.joystickName = analogJoystick.name;
 	this.robotName = zumo.name;
 
+	this.name = this.robotName + "Mapping" + this.joystickName;
+
 	this.listeners = [];
 
 	this.attachListeners = function() {

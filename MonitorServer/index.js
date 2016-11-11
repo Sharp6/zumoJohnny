@@ -134,6 +134,10 @@ var MonitorServer = function(joysticks,robots,managers) {
 		});
 	});
 
+	managers.mapperRepository.on("newMapping", function(mapping) {
+		io.emit("newMapping", mapping);
+	});
+
 	io.on('connection', function(socket){
 		console.log('a user connected');
 

@@ -1,6 +1,7 @@
 var Joystick = function(name) {
 	this.name = name;
 	this.selectedRobot = ko.observable();
+	
 	this.mappedRobot = ko.observable();
 	this.requestMapping = function() {
 		console.log("Requesting mapping: ", this.name, this.selectedRobot().name);

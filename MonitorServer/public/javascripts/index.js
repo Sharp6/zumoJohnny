@@ -8,6 +8,7 @@ var assets = ko.observableArray([]);
 var players = ko.observableArray([]);
 var participants = ko.observableArray([]);
 var games = ko.observableArray([]);
+var mappings = ko.observableArray([]);
 
 var newPlayer = {
 	name: ko.observable()
@@ -27,6 +28,12 @@ var createGame = function() {
 	console.log("CREATING GAME", { action:'createGame', assets: assets(), players: players(), numberOfChallenges: newGame.numberOfChallenges() });
 	socket.emit('clientEvent', { action:'createGame', assets: assets(), players: players(), numberOfChallenges: newGame.numberOfChallenges(), name: newGame.name() });
 };
+
+var newMapping = {
+	selectedJoystick = ko.observable(),
+	selectedRobot = ko.observable()
+
+}
 
 socket.on("joysticks", function(data) {
 	data.names.forEach(function(name) {
@@ -134,6 +141,11 @@ socket.on("assetDisconnected", function(assetId) {
 	if(asset) {
 		assets.splice(assets.indexOf(asset), 1);	
 	}
+});
+
+// MAPPINGS
+socket.on("newMapping", function(data) {
+	mappings.push(new Mapping(data));
 });
 
 socket.on("stickExtremesReport", function(msg) {

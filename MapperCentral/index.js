@@ -29,11 +29,11 @@ var MapperCentral = function(joysticks, robots) {
 			newMapping.attachListeners();
 			if(newMapping) {
 				mappings.push(newMapping);
-				joystick.notifyBinding(data.robotName);
+				//joystick.notifyBinding(data.robotName);
+				this.emit("newMapping", newMapping);
 			}
 		}
 	};
-
 
 	this.requestMapRemoval = function(data) {
 		var mapping = mappings.find(function(mapping) {
@@ -49,5 +49,7 @@ var MapperCentral = function(joysticks, robots) {
 		}
 	};
 };
+
+MapperCentral.prototype = Object.create(require('events').EventEmitter.prototype);
 
 module.exports = MapperCentral;

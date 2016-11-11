@@ -82,26 +82,37 @@
 				</li>
 			</ul>
 
+			<h1>Joysticks</h1>
+			<ul data-bind="foreach:joysticks">
+				<li>
+					<span data-bind="text:name"></span>
+					<button class="btn btn-default" data-bind="click:monitorJoystick">Monitor joystick</button>
+				</li>
+			</ul>
+
 			
-			<h1>Joystick mappings</h1>
-			<div class="row" id="joysticks" data-bind="foreach:joysticks">
+			<h1>Mappings</h1>
+			<div class="row" id="mappings" data-bind="foreach:mappings">
 				<div class="col-s-6">
 					<h3 data-bind="text:name"></h3>
-					<form>
-						<div class="input-field">
-							<select data-bind="options:$parent.robots, optionsText: 'name', value: selectedRobot, optionsCaption: 'Select robot...'" class="browser-default" id="robotSelect"></select>
-							<label for="robotSelect">Choose your bot</label>
-						</div>
-					</form>
-					<p>
-						<br />
-						Mapped robot: <span data-bind="text:mappedRobot()? mappedRobot().name : 'none'"></span>
-					</p>
-					<button class="btn btn-default" data-bind="click:requestMapping">Map me!</button>
 					<button class="btn btn-default" data-bind="click:requestMapRemoval">Remove mapping</button>
-					<button class="btn btn-default" data-bind="click:monitorJoystick">Monitor joystick</button>
+					
 				</div>
 			</div>
+
+			<h5>New mapping</h5>
+			<form data-bind="with:newMapping">
+				<div class="input-field">
+					<select data-bind="options:$parent.robots, optionsText: 'name', value: selectedRobot, optionsCaption: 'Select robot...'" id="robotSelect"></select>
+					<label for="robotSelect">Choose your bot</label>
+				</div>
+
+				<div class="input-field">
+					<select data-bind="options:$parent.joysticks, optionsText: 'name', value: selectedJoystick, optionsCaption: 'Select joystick...'" id="joystickSelect"></select>
+					<label for="joystickSelect">Choose your joystick</label>
+				</div>
+			</form>
+			<button class="btn btn-default" data-bind="click:requestMapping">Add mapping!</button>
 			
 			<h1>Monitoring</h1>
 
@@ -171,6 +182,7 @@
 		<script src="/javascripts/Game.model.client.js"></script>
 		<script src="/javascripts/Participant.model.client.js"></script>
 		<script src="/javascripts/Player.model.client.js"></script>
+		<script src="/javascripts/Mapping.model.client.js"></script>
 
 		<script src="/javascripts/index.js"></script>
 
