@@ -56,13 +56,13 @@ function Mapping(zumo, analogJoystick, mappingTypeName) {
 		var fireButtonThis = fireButton.bind(this);
 		this.listeners.push({ eventName: "fireButton", listener: fireButtonThis });
 		this.joystick.on("fireButton", fireButtonThis);
-		
+
 	}.bind(this);
 	
 	this.removeListeners = function() {
 		this.listeners.forEach(function(listener) {
 			this.joystick.removeListener(listener.eventName, listener.listener);
-		});
+		}.bind(this));
 	}.bind(this);
 }
 
