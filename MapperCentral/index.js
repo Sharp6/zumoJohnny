@@ -39,7 +39,7 @@ var MapperCentral = function(joysticks, robots) {
 
 	this.requestMapRemoval = function(data) {
 		var mapping = mappings.find(function(mapping) {
-			return mapping.joystickName === data.joystickName;
+			return mapping.name === data.name;
 		});
 
 		if(mapping) {
