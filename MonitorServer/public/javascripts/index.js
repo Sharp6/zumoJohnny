@@ -37,7 +37,7 @@ var newMapping = {
 }
 
 var requestMapping = function() {
-	socket.emit('clientEvent', { action: 'requestMapping', joystick: newMapping.selectedJoystick().name, robot: newMapping.selectedRobot().name });
+	socket.emit('clientEvent', { action: 'requestMapping', joystick: newMapping.selectedJoystick().name, robot: newMapping.selectedRobot().name, mappingType: selectedMappingType() });
 };
 
 socket.on("joysticks", function(data) {
@@ -157,6 +157,15 @@ socket.on("assetDisconnected", function(assetId) {
 // MAPPINGS
 socket.on("newMapping", function(data) {
 	mappings.push(new Mapping(data));
+});
+
+socket.on("removedMapping", function(data) {
+	var mapping = mappings().find(function(mapping) {
+		return mapping.name === data.name;
+	});
+	if(mapping) {
+		mappings.splice(mappings.indexOf(mapping), 1);
+	}
 });
 
 socket.on("stickExtremesReport", function(msg) {

@@ -28,6 +28,12 @@ var MappingTypeRepo = function() {
 		return this.mappingTypes[0];
 	};
 
+	this.getMappingType = function(mappingTypeName) {
+		return this.mappingTypes.find(function(mappingType) {
+			return mappingType.name === mappingTypeName;
+		});
+	};
+
 };
 
 module.exports = MappingTypeRepo;

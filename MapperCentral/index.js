@@ -18,6 +18,7 @@ var MapperCentral = function(joysticks, robots) {
 		var joystick = joysticks.find(function(joystick) {
 			return joystick.name === data.joystickName;
 		});
+		var mappingType = mappingTypes.getMappingType(data.mappingType); // Select the mapping type
 
 		var mapping = mappings.find(function(mapping) {
 			return mapping.joystickName === data.joystickName;
@@ -26,7 +27,7 @@ var MapperCentral = function(joysticks, robots) {
 		if(mapping) {
 			// Mapping for this joystick already exists. What should happen now?
 		} else {
-			var mappingType = mappingTypes.getAnalogToTankMapping(); // Select the mapping type
+			
 			var newMapping = new Mapping(robot,joystick,mappingType);
 			newMapping.attachListeners();
 			if(newMapping) {
@@ -45,7 +46,7 @@ var MapperCentral = function(joysticks, robots) {
 		if(mapping) {
 			mapping.removeListeners();
 			mappings.splice(mappings.indexOf(mapping),1);
-			mapping.joystick.notifyBinding(null);
+			this.emit("removedMapping", { name: mapping.name });
 		} else {
 			// Mapping not found. What should happen now?
 		}

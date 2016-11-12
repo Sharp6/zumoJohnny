@@ -49,7 +49,7 @@ var MonitorServer = function(joysticks,robots,managers) {
 			removeListenersOf(joystick);
 		},
 		requestMapping: function(data) {
-			managers.mapperRepository.requestMapping({ joystickName: data.joystick, robotName: data.robot });
+			managers.mapperRepository.requestMapping({ joystickName: data.joystick, robotName: data.robot, mappingType:data.mappingType });
 		}.bind(this),
 		requestMapRemoval: function(data) {
 			managers.mapperRepository.requestMapRemoval({ name: data.name });
@@ -136,6 +136,10 @@ var MonitorServer = function(joysticks,robots,managers) {
 
 	managers.mapperRepository.on("newMapping", function(mapping) {
 		io.emit("newMapping", mapping);
+	});
+
+	managers.mapperRepository.on("removedMapping", function(mapping) {
+		io.emit("removedMapping", mapping);
 	});
 
 	io.on('connection', function(socket){
