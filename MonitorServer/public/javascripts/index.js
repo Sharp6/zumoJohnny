@@ -206,6 +206,7 @@ function draw() { }
 var vm = {
 	joysticks: joysticks,
 	robots: robots,
-	assets: assets
+	assets: assets,
+	mappingTypes: mappingTypes
 };
 ko.applyBindings(vm);
