@@ -37,7 +37,7 @@ var newMapping = {
 }
 
 var requestMapping = function() {
-	socket.emit('clientEvent', { action: 'requestMapping', joystick: newMapping.selectedJoystick().name, robot: newMapping.selectedRobot().name, mappingType: selectedMappingType() });
+	socket.emit('clientEvent', { action: 'requestMapping', joystick: newMapping.selectedJoystick().name, robot: newMapping.selectedRobot().name, mappingType: newMapping.selectedMappingType() });
 };
 
 socket.on("joysticks", function(data) {
