@@ -9,6 +9,7 @@ var players = ko.observableArray([]);
 var participants = ko.observableArray([]);
 var games = ko.observableArray([]);
 var mappings = ko.observableArray([]);
+var mappingTypes = ko.observableArray([]);
 
 var newPlayer = {
 	name: ko.observable()
@@ -31,7 +32,8 @@ var createGame = function() {
 
 var newMapping = {
 	selectedJoystick: ko.observable(),
-	selectedRobot: ko.observable()
+	selectedRobot: ko.observable(),
+	selectedMappingType: ko.observable()
 }
 
 var requestMapping = function() {
@@ -53,6 +55,12 @@ socket.on("robots", function(data) {
 socket.on("assets", function(data) {
 	data.assets.forEach(function(assetData) {
 		assets.push(new Asset(assetData));
+	});
+});
+
+socket.on("mappingTypes", function(data) {
+	data.mappingTypes.forEach(function(mappingTypeData) {
+		mappingTypes.push(mappingTypeData.name);
 	});
 });
 

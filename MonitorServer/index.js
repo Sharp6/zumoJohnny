@@ -144,6 +144,7 @@ var MonitorServer = function(joysticks,robots,managers) {
 		socket.emit('robots', { names: robotNames });
 		socket.emit('joysticks', { names: joystickNames });
 		socket.emit('assets', { assets: assetManager.assets });
+		socket.emit('mappingTypes', { mappingTypes: managers.mapperRepository.mappingTypeNames });
 		socket.on('clientEvent', function(data) {
 			if(data.action && handlers[data.action]) {
 				handlers[data.action](data, socket);

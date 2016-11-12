@@ -111,6 +111,11 @@
 					<select data-bind="options:$parent.joysticks, optionsText: 'name', value: selectedJoystick, optionsCaption: 'Select joystick...'" id="joystickSelect"></select>
 					<label for="joystickSelect">Choose your joystick</label>
 				</div>
+
+				<div class="input-field">
+					<select data-bind="options:$parent.mappingTypes, value: selectedMappingType, optionsCaption: 'Select type of mapping...'" id="mappingTypeSelect"></select>
+					<label for="mappingTypeSelect">Choose your type of mapping</label>
+				</div>
 			</form>
 			<button class="btn btn-default" data-bind="click:requestMapping">Add mapping!</button>
 			

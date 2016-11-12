@@ -1,12 +1,14 @@
 "use strict";
 
 var Mapping = require("./Mapping");
-var MappingType = require('./MappingType');
-var mappingTypes = new MappingType();
+var MappingType = require('./MappingType.repository');
 
 var MapperCentral = function(joysticks, robots) {
 
 	var mappings = [];
+	var mappingTypes = new MappingType();
+
+	this.mappingTypeNames = mappingTypes.getMappingTypeNames();
 
 	this.requestMapping = function(data) {
 		console.log("MapperCentral got a request for mapping", data);
