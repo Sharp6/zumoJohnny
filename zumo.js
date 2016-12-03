@@ -1,6 +1,8 @@
 "use strict";
 var fs = require('fs');
 
+var Firmata = require("Firmata");
+var EtherPortClient = require("etherport-client").EtherPortClient;
 var five = require("johnny-five");
 
 var MapperCentral = require('./MapperCentral');
@@ -9,15 +11,31 @@ var AssetManager = require('./AssetManager');
 var GameManager = require('./GameManager');
 var PlayerManager = require('./PlayerManager');
 var ZumoBot = require("./zumoBot");
+var TankBot = require("./TankBot");
+var ZumoJohnnyEsp = require("./ZumoJohnnyEsp");
 //var AtariJoystick = require("./AtariJoystick");
 //var Ps3Joystick = require("./ps3Joystick");
 var NunchukJoystick = require('./NunchukJoystick');
 var AnalogJoystick = require("./AnalogJoystick");
 
-var config = JSON.parse(fs.readFileSync('./zumoConfig.json').toString());
+var config = {};
+config.json = JSON.parse(fs.readFileSync('./zumoConfig.json').toString());
+config.ports = config.json.ports.map(function(configEntry) {
+  if(configEntry.host) {
+    // Do the ethernet
+    configEntry.io = new Firmata(new EtherPortClient({
+      host: configEntry.host,
+      port: 3030
+    }));
+    configEntry.timeout = 1e5;
 
-//var robot;
-//var joystick;
+    return configEntry;
+  } else {
+    return configEntry;
+  }
+});
+
+
 var robots = [];
 var joysticks = [];
 var monitor;
@@ -49,6 +67,9 @@ function initBoards() {
         //robot = new ZumoBot(board, five);
         robots.push(new ZumoBot(board.id, board, five));
         console.log("Robot is ready");
+      } else if (boardType === "zumoEsp") {
+        robots.push(new TankBot(new ZumoJohnnyEsp(board.id, board, five)));
+        console.log("ESP ZUMO BOT is ready");
       } else if (boardType === "nunchuk") {
         joysticks.push(new AnalogJoystick(board.id, new NunchukJoystick(board, five)));
         console.log("Joystick has been initted.");

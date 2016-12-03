@@ -89,11 +89,13 @@ var MonitorServer = function(joysticks,robots,managers) {
 		io.emit("newGame", game);
 
 		game.on("gameStateChange", function(state) {
+			// THIS SHOULD BE OBJECT
 			io.emit("gameStateChange", game.name + "|" + state);
 		});
 
 		game.challenges.forEach(function(challenge) {
 			challenge.on("stateChange", function(challengeState) {
+				// THIS SHOULD BE OBJECT
 				io.emit("challengeStateChange", challenge.name + "|" + challengeState);
 			});
 		});
@@ -101,6 +103,7 @@ var MonitorServer = function(joysticks,robots,managers) {
 		game.participants.forEach(function(participant) {
 			participant.on("participantScoreUpdate", function(score) {
 				console.log("MonitorServer: Updating score for participant", participant.name);
+				// THIS SHOULD BE OBJECT
 				io.emit("participantScoreUpdate", participant.name + "|" + score);
 			});
 		});
@@ -108,11 +111,6 @@ var MonitorServer = function(joysticks,robots,managers) {
 
 	managers.playerManager.on("newPlayer", function(player) {
 		io.emit("newPlayer", player);
-
-		/*player.on("playerScoreUpdate", function(score) {
-			io.emit("playerScoreUpdate", player.name + "|" + score);
-		});
-*/
 	});
 
 	assetManager.on("newAsset", function(asset) {
@@ -120,6 +118,7 @@ var MonitorServer = function(joysticks,robots,managers) {
 		io.emit("newAsset", asset);
 
 		asset.on("assetStateUpdate", function(state) {
+			// THIS SHOULD BE OBJECT
 			io.emit("assetStateUpdate", asset.assetId + "|" + state);
 		});
 

@@ -40,6 +40,7 @@ var requestMapping = function() {
 	socket.emit('clientEvent', { action: 'requestMapping', joystick: newMapping.selectedJoystick().name, robot: newMapping.selectedRobot().name, mappingType: newMapping.selectedMappingType() });
 };
 
+// INIT LISTENERS
 socket.on("joysticks", function(data) {
 	data.names.forEach(function(name) {
 		joysticks.push(new Joystick(name));
@@ -64,6 +65,9 @@ socket.on("mappingTypes", function(data) {
 	});
 });
 
+// DOMAIN AND LIFECYCLE EVENTS
+
+// MAPPING, but in the old way
 socket.on("bindingNotification", function(data) {
 	var currentJoystick = joysticks().find(function(joystick) {
 		return joystick.name === data.joystickName;
@@ -83,7 +87,6 @@ socket.on("newPlayer", function(data) {
 // PARTICIPANTS
 socket.on("participantScoreUpdate", function(data) {
 	var participantName = data.split("|")[0];
-	//var playerName = data.split("|")[0];
 	var score = data.split("|")[1];
 
 	var participant = participants().find(function(participant) {

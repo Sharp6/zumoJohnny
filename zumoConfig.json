@@ -1,16 +1,19 @@
 {
-	"ports": [
-		{
+	"unused": [{
 			"id": "nunchukBoard", 
 			"port": "/dev/ttyUSB0"
 		},
 		{
 			"id": "zumoBoard",
 			"port": "/dev/ttyUSB1"
-		}
-		],"notinuse":{
-			"id": "nunchukBoard2",
-			"port": "/dev/ttyUSB2"
-		}
-	 
+		}],
+	"ports": [
+		{
+			"id": "nunchukBoard", 
+			"port": "/dev/ttyUSB0"
+		},
+		{
+			"id": "zumoEspBoard",
+			"host": "192.168.1.119"
+		}]	 
 }
