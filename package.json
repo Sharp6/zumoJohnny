@@ -11,6 +11,7 @@
   "dependencies": {
     "express": "^4.14.0",
     "johnny-five": "^0.9.2",
+    "moment": "^2.15.2",
     "mqtt": "^2.0.1",
     "node-gamepad": "^0.1.15",
     "socket.io": "^1.5.1"

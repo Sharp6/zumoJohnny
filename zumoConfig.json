@@ -8,5 +8,9 @@
 			"id": "zumoBoard",
 			"port": "/dev/ttyUSB1"
 		}
-	] 
+		],"notinuse":{
+			"id": "nunchukBoard2",
+			"port": "/dev/ttyUSB2"
+		}
+	 
 }
