@@ -65,7 +65,8 @@ function initBoards() {
 
       if(boardType === "zumo") {
         //robot = new ZumoBot(board, five);
-        robots.push(new ZumoBot(board.id, board, five));
+        //robots.push(new ZumoBot(board.id, board, five));
+        robots.push(new TankBot(new ZumoJohnnyDirect(board.id, board, five)));
         console.log("Robot is ready");
       } else if (boardType === "zumoEsp") {
         robots.push(new TankBot(new ZumoJohnnyEsp(board.id, board, five)));
