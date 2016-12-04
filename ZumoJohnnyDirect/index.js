@@ -1,7 +1,6 @@
-var ZumoDriver = require('./../zumoDriver');
-
-var ZumoBot = function(name, board, five) {
+var ZumoJohnnyDirect = function(name, board, five) {
   console.log("Hello, I'm Zumo, and I've got board", board.port);
+  this.name = name;
 	var configs = five.Motor.SHIELD_CONFIGS.POLOLU_DRV8835_SHIELD;
 
 	[configs.M1, configs.M2].forEach(function(configObj) {
@@ -10,15 +9,13 @@ var ZumoBot = function(name, board, five) {
 
   var motor1 = new five.Motor(configs.M1);
   var motor2 = new five.Motor(configs.M2);
-  var motors = {
+  
+  this.motors = {
     leftMotor: motor1,
     rightMotor: motor2
   };
-  
-  var laser = new five.Led({ board: board, pin: 4 });
-  var buzzer = new five.Piezo({ board: board, pin: 3 });
-
-  return new ZumoDriver({ name: name, motors: motors, laser: laser, buzzer: buzzer });
+  this.laser = new five.Led({ board: board, pin: 4 });
+  this.buzzer = new five.Piezo({ board: board, pin: 3 });
 };
 
-module.exports = ZumoBot;
+module.exports = ZumoJohnnyDirect;
