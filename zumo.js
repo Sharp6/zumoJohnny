@@ -1,7 +1,7 @@
 "use strict";
 var fs = require('fs');
 
-var Firmata = require("Firmata");
+var Firmata = require("firmata");
 var EtherPortClient = require("etherport-client").EtherPortClient;
 var five = require("johnny-five");
 
