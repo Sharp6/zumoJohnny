@@ -48,8 +48,12 @@ var ZumoJohnnyEsp = function(name, board, five) {
 
   function motorFunctionFactory(config, direction) {
     return function(speed) {
-      this.setPin(config.pins.dir, direction);
-      this.setPWM(config.pins.pwm, speed * 4);
+      if(speed > 40) {
+        this.setPin(config.pins.dir, direction);
+        this.setPWM(config.pins.pwm, speed * 4);
+      } else {
+        this.setPWM(config.pins.pwm, 0);
+      }
     };
   }
 
