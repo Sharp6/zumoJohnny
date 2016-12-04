@@ -18,7 +18,7 @@ var ZumoJohnnyEsp = function(name, board, five) {
   var motor1 = new five.Motor(configs.M1);
   var motor2 = new five.Motor(configs.M2);
 
-  
+  /*
   motor1.forward = function(speed) {
     motor1.setPin(configs.M1.pins.dir, 1);
     motor1.setPWM(configs.M1.pins.pwm, speed * 4);
@@ -38,6 +38,20 @@ var ZumoJohnnyEsp = function(name, board, five) {
     motor2.setPin(configs.M2.pins.dir, 0);
     motor2.setPWM(configs.M2.pins.pwm, speed * 4);
   };
+  */
+
+  motor1.forward = motorFunctionFactory(configs.M1, 1);
+  motor1.reverse = motorFunctionFactory(configs.M1, 0);
+  motor2.forward = motorFunctionFactory(configs.M2, 1);
+  motor2.reverse = motorFunctionFactory(configs.M2, 0);
+
+
+  function motorFunctionFactory(config, direction) {
+    return function(speed) {
+      this.setpPin(config.pins.dir, direction);
+      this.setPWM(config.pins.pwm, speed * 4);
+    };
+  }
 
   this.motors = {
     leftMotor: motor1,
