@@ -13,6 +13,7 @@ var PlayerManager = require('./PlayerManager');
 var ZumoBot = require("./zumoBot");
 var TankBot = require("./TankBot");
 var ZumoJohnnyEsp = require("./ZumoJohnnyEsp");
+var ZumoJohnnyDirect = require("./ZumoJohnnyDirect");
 //var AtariJoystick = require("./AtariJoystick");
 //var Ps3Joystick = require("./ps3Joystick");
 var NunchukJoystick = require('./NunchukJoystick');
