@@ -1,5 +1,5 @@
 "use strict";
-var MonitorServer = function(joysticks,robots,managers) {
+var MonitorServer = function(managers) {
 	var express = require('express');
 	var path = require('path');
 	var app = express();
@@ -10,50 +10,13 @@ var MonitorServer = function(joysticks,robots,managers) {
 	});
 	app.use(express.static(path.join(__dirname, 'public')));
 
-	var assetManager = managers.assetManager;
-
-	function moveCallback(state) {
-		io.emit("stickExtremesReport", state.extremes);
-		io.emit("normalizedPositionReport", state.normalizedPosition);
-		io.emit("rawPositionReport", state.rawPosition);
-	}
-
-	function buttonCallback(state) {
-		io.emit("fireButton", state);
-	}
-
-	function attachListenersTo(joystick) {
-		joystick.on("stickMove", moveCallback);
-		joystick.on("fireButton", buttonCallback);
-	}
-
-	function removeListenersOf(joystick) {
-		joystick.removeListener("stickMove", moveCallback);
-		joystick.removeListener("fireButton", buttonCallback);
-	}
-
 	var handlers = {
-		monitorJoystick: function(data, socket) {
-			joysticks.forEach(function(joystick) {
-				if(joystick.name === data.joystick) {
-					attachListenersTo(joystick);
-				} else {
-					removeListenersOf(joystick);
-				}
-			});
-		},
-		disconnectJoystick: function(data, socket) {
-			var joystick = joysticks.find(function(joystick) {
-				return joystick.name === data.joystick;
-			});
-			removeListenersOf(joystick);
-		},
 		requestMapping: function(data) {
 			managers.mapperRepository.requestMapping({ joystickName: data.joystick, robotName: data.robot, mappingType:data.mappingType });
-		}.bind(this),
+		},
 		requestMapRemoval: function(data) {
 			managers.mapperRepository.requestMapRemoval({ name: data.name });
-		}.bind(this),
+		},
 		createGame: function(data, socket) {
 			// Get player objects
 			var players = data.players.map(function(player) {
@@ -77,6 +40,7 @@ var MonitorServer = function(joysticks,robots,managers) {
 		}
 	};
 
+  /*
 	var joystickNames = joysticks.map(function(joystick) {
 		return joystick.name;
 	});
@@ -84,6 +48,7 @@ var MonitorServer = function(joysticks,robots,managers) {
 	var robotNames = robots.map(function(robot) {
 		return robot.name;
 	});
+  */
 
 	managers.gameManager.on("newGame", function(game) {
 		io.emit("newGame", game);
@@ -113,7 +78,7 @@ var MonitorServer = function(joysticks,robots,managers) {
 		io.emit("newPlayer", player);
 	});
 
-	assetManager.on("newAsset", function(asset) {
+	managers.assetManager.on("newAsset", function(asset) {
 		console.log("MONITORSERVER got new asset", asset);
 		io.emit("newAsset", asset);
 
@@ -127,11 +92,13 @@ var MonitorServer = function(joysticks,robots,managers) {
 		});
 	});
 
+  /*
 	joysticks.forEach(function(joystick) {
 		joystick.on("bindingNotification", function(data) {
 			io.emit("bindingNotification", data);
 		});
 	});
+  */
 
 	managers.mapperRepository.on("newMapping", function(mapping) {
 		io.emit("newMapping", mapping);
@@ -144,10 +111,14 @@ var MonitorServer = function(joysticks,robots,managers) {
 	io.on('connection', function(socket){
 		console.log('a user connected');
 
-		socket.emit('robots', { names: robotNames });
-		socket.emit('joysticks', { names: joystickNames });
-		socket.emit('assets', { assets: assetManager.assets });
+		socket.emit('robots', { robots: managers.robotManager.robots });
+		socket.emit('joysticks', { joysticks: managers.joystickManager.joysticks });
+		socket.emit('players', { players: managers.playerManager.players })
+		socket.emit('assets', { assets: managers.assetManager.assets });
+    socket.emit('games', { games: mangers.gameManager.games });
+    socket.emit('mappings', { mappings: managers.mapperRepository.mappings });
 		socket.emit('mappingTypes', { mappingTypes: managers.mapperRepository.mappingTypeNames });
+
 		socket.on('clientEvent', function(data) {
 			if(data.action && handlers[data.action]) {
 				handlers[data.action](data, socket);

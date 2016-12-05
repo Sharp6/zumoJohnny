@@ -3,7 +3,7 @@
 var Mapping = require("./Mapping");
 var MappingType = require('./MappingType.repository');
 
-var MapperCentral = function(joysticks, robots) {
+var MapperCentral = function(joystickManager, robotManager) {
 
 	var mappings = [];
 	var mappingTypes = new MappingType();
@@ -12,10 +12,10 @@ var MapperCentral = function(joysticks, robots) {
 
 	this.requestMapping = function(data) {
 		console.log("MapperCentral got a request for mapping", data);
-		var robot = robots.find(function(robot) {
+		var robot = robotManager.robots.find(function(robot) {
 			return robot.name === data.robotName;
 		});
-		var joystick = joysticks.find(function(joystick) {
+		var joystick = joystickManager.joysticks.find(function(joystick) {
 			return joystick.name === data.joystickName;
 		});
 		var mappingType = mappingTypes.getMappingType(data.mappingType); // Select the mapping type
@@ -27,7 +27,7 @@ var MapperCentral = function(joysticks, robots) {
 		if(mapping) {
 			// Mapping for this joystick already exists. What should happen now?
 		} else {
-			
+
 			var newMapping = new Mapping(robot,joystick,mappingType);
 			newMapping.attachListeners();
 			if(newMapping) {
