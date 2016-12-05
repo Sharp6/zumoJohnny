@@ -1,19 +1,22 @@
+"use strict";
+
 var Game = function(data) {
 	this.name = data.name;
 	this.numberOfChallenges = data.numberOfChallenges;
-	this.state = ko.observable(data.state);
+	this.state = ko.observable(data.state); // global library
 
-	data.participants.forEach(function(participantData) {
-		var player = players().find(function(player) {
+	this.participants = data.participants.map(function(participantData) {
+		var player = players().find(function(player) { // AUCH GLOBAL
 			return player.name === participantData.player.name;
 		});
-		var newParticipant = new Participant({ 
+		var newParticipant = new Participant({ // global constructor
 			name: participantData.name,
 			player: player,
 			score: participantData.score
 		});
-		participants.push(newParticipant);
 		player.participants.push(newParticipant);
+
+		return newParticipant;
 	});
 
 	this.assets = data.assets.map(function(assetData) {

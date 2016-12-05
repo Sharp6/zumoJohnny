@@ -6,7 +6,7 @@ var joysticks = ko.observableArray([]);
 var robots = ko.observableArray([]);
 var assets = ko.observableArray([]);
 var players = ko.observableArray([]);
-var participants = ko.observableArray([]);
+//var participants = ko.observableArray([]);
 var games = ko.observableArray([]);
 var mappings = ko.observableArray([]);
 var mappingTypes = ko.observableArray([]);
@@ -42,14 +42,14 @@ var requestMapping = function() {
 
 // INIT LISTENERS
 socket.on("joysticks", function(data) {
-	data.names.forEach(function(name) {
-		joysticks.push(new Joystick(name));
+	data.joysticks.forEach(function(joystickData) {
+		joysticks.push(new Joystick(joystickData));
 	});
 });
 
 socket.on("robots", function(data) {
-	data.names.forEach(function(name) {
-		robots.push(new Robot(name));
+	data.robots.forEach(function(robotData) {
+		robots.push(new Robot(robotData));
 	});
 });
 
@@ -64,6 +64,14 @@ socket.on("mappingTypes", function(data) {
 		mappingTypes.push(mappingTypeData.name);
 	});
 });
+
+socket.on("players", function(data) {
+	data.players.forEach(function(playerData) {
+		players.push(new Player(playerData));
+	});
+});
+
+
 
 // DOMAIN AND LIFECYCLE EVENTS
 
@@ -93,7 +101,7 @@ socket.on("participantScoreUpdate", function(data) {
 		return participant.name === participantName;
 	});
 	if(participant) {
-		participant.score(score);	
+		participant.score(score);
 	} else {
 		console.log("Cannot find participant to update score:", participantName, "for participants", participants());
 	}
@@ -153,7 +161,7 @@ socket.on("assetDisconnected", function(assetId) {
 		return asset.assetId === assetId;
 	});
 	if(asset) {
-		assets.splice(assets.indexOf(asset), 1);	
+		assets.splice(assets.indexOf(asset), 1);
 	}
 });
 
@@ -186,7 +194,7 @@ socket.on("rawPositionReport", function(msg) {
 socket.on("normalizedPositionReport", function(msg) {
 	$('#xPosNorm').text(msg.x);
 	$('#yPosNorm').text(msg.y);
-	drawCursor(msg);		  	
+	drawCursor(msg);
 });
 
 socket.on("fireButton", function(state) {

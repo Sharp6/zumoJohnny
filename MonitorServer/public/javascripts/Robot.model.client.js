@@ -1,5 +1,3 @@
-var Robot = function(name) {
-	this.name = name;
+var Robot = function(data) {
+	this.name = data.name;
 };
-
-//module.exports = Robot;
