@@ -1,7 +1,6 @@
 {
-	"unused": [
-		],
 	"ports": [
+		
 		{
 			"id": "nunchukBoard1", 
 			"port": "/dev/ttyUSB0"
@@ -17,5 +16,7 @@
 		{
 			"id": "zumoEspBoard",
 			"host": "192.168.1.119"
-		}]	 
+		}],
+
+	"unused": []
 }

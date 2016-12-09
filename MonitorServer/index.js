@@ -27,8 +27,18 @@ var MonitorServer = function(managers) {
 				return managers.assetManager.getAssetFor(asset.assetId);
 			});
 
-			if(assets.length > 0 && players.length > 0) {
+			var errors = [];
+			if(assets.length === 0) {
+				errors.push("Game creation failed: no assets are defined.");
+			}
+			if(players.length === 0) {
+				errors.push("Game creation failed: no players are defined.");
+			}
+
+			if(errors.length === 0) {
 				managers.gameManager.createGame({name: data.name, numberOfChallenges: data.numberOfChallenges, players: players, assets: assets });
+			} else {
+				socket.emit("errorMessage", { messages: errors });
 			}
 		},
 		startGame: function(data, socket) {
@@ -40,36 +50,23 @@ var MonitorServer = function(managers) {
 		}
 	};
 
-  /*
-	var joystickNames = joysticks.map(function(joystick) {
-		return joystick.name;
-	});
-
-	var robotNames = robots.map(function(robot) {
-		return robot.name;
-	});
-  */
-
 	managers.gameManager.on("newGame", function(game) {
 		io.emit("newGame", game);
 
 		game.on("gameStateChange", function(state) {
-			// THIS SHOULD BE OBJECT
-			io.emit("gameStateChange", game.name + "|" + state);
+			io.emit("gameStateChange", { gameName: game.name, state: state });
 		});
 
 		game.challenges.forEach(function(challenge) {
 			challenge.on("stateChange", function(challengeState) {
-				// THIS SHOULD BE OBJECT
-				io.emit("challengeStateChange", challenge.name + "|" + challengeState);
+				io.emit("challengeStateChange", { challengeName: challenge.name,  state: challengeState });
 			});
 		});
 
 		game.participants.forEach(function(participant) {
 			participant.on("participantScoreUpdate", function(score) {
 				console.log("MonitorServer: Updating score for participant", participant.name);
-				// THIS SHOULD BE OBJECT
-				io.emit("participantScoreUpdate", participant.name + "|" + score);
+				io.emit("participantScoreUpdate", { participantName: participant.name, score: score });
 			});
 		});
 	});
@@ -83,22 +80,13 @@ var MonitorServer = function(managers) {
 		io.emit("newAsset", asset);
 
 		asset.on("assetStateUpdate", function(state) {
-			// THIS SHOULD BE OBJECT
-			io.emit("assetStateUpdate", asset.assetId + "|" + state);
+			io.emit("assetStateUpdate", { assetId: asset.assetId, state: state });
 		});
 
 		asset.on("assetDisconnected", function() {
 			io.emit("assetDisconnected", asset.assetId);
 		});
 	});
-
-  /*
-	joysticks.forEach(function(joystick) {
-		joystick.on("bindingNotification", function(data) {
-			io.emit("bindingNotification", data);
-		});
-	});
-  */
 
 	managers.mapperRepository.on("newMapping", function(mapping) {
 		io.emit("newMapping", mapping);
@@ -113,9 +101,9 @@ var MonitorServer = function(managers) {
 
 		socket.emit('robots', { robots: managers.robotManager.robots });
 		socket.emit('joysticks', { joysticks: managers.joystickManager.joysticks });
-		socket.emit('players', { players: managers.playerManager.players })
+		socket.emit('players', { players: managers.playerManager.players });
 		socket.emit('assets', { assets: managers.assetManager.assets });
-    socket.emit('games', { games: mangers.gameManager.games });
+    socket.emit('games', { games: managers.gameManager.games });
     socket.emit('mappings', { mappings: managers.mapperRepository.mappings });
 		socket.emit('mappingTypes', { mappingTypes: managers.mapperRepository.mappingTypeNames });
 

@@ -2,6 +2,8 @@
 var socket = io();
 var canvas;
 
+var alerts = ko.observableArray([]);
+
 var joysticks = ko.observableArray([]);
 var robots = ko.observableArray([]);
 var assets = ko.observableArray([]);
@@ -34,10 +36,14 @@ var newMapping = {
 	selectedJoystick: ko.observable(),
 	selectedRobot: ko.observable(),
 	selectedMappingType: ko.observable()
-}
+};
 
 var requestMapping = function() {
 	socket.emit('clientEvent', { action: 'requestMapping', joystick: newMapping.selectedJoystick().name, robot: newMapping.selectedRobot().name, mappingType: newMapping.selectedMappingType() });
+};
+
+var closeAlert = function(data) {
+	alerts.remove(data);
 };
 
 // INIT LISTENERS
@@ -94,16 +100,19 @@ socket.on("newPlayer", function(data) {
 
 // PARTICIPANTS
 socket.on("participantScoreUpdate", function(data) {
-	var participantName = data.split("|")[0];
-	var score = data.split("|")[1];
+	// get game
+	var gameName = data.participantName.split("Participant")[0]; // participantName is gameName + "Participant" + i in game constructor
+	var game = games().find(function(game) {
+		return game.name === gameName;
+	});
 
-	var participant = participants().find(function(participant) {
-		return participant.name === participantName;
+	var participant = game.participants.find(function(participant) {
+		return participant.name === data.participantName;
 	});
 	if(participant) {
-		participant.score(score);
+		participant.score(data.score);
 	} else {
-		console.log("Cannot find participant to update score:", participantName, "for participants", participants());
+		alerts.push("Cannot find participant to update score:", data.participantName);
 	}
 });
 
@@ -114,30 +123,25 @@ socket.on("newGame", function(data) {
 });
 
 socket.on("gameStateChange", function(data) {
-	var name = data.split("|")[0];
-	var state = data.split("|")[1];
-
 	var game = games().find(function(game) {
-		return game.name === name;
+		return game.name === data.gameName;
 	});
-	game.state(state);
+	game.state(data.state);
 });
 
 // CHALLENGES
 socket.on("challengeStateChange", function(data) {
-	var challengeName = data.split("|")[0];
-	var challengeState = data.split("|")[1];
 	// get game
-	var gameName = challengeName.split("Challenge")[0]; // challengeName is gameName + "challenge" + i in game constructor
+	var gameName = data.challengeName.split("Challenge")[0]; // challengeName is gameName + "challenge" + i in game constructor
 	var game = games().find(function(game) {
 		return game.name === gameName;
 	});
 	// get challenge
 	var challenge = game.challenges.find(function(challenge) {
-		return challenge.name === challengeName;
+		return challenge.name === data.challengeName;
 	});
 	// update challenge
-	challenge.state(challengeState);
+	challenge.state(data.state);
 });
 
 // ASSETS
@@ -147,13 +151,10 @@ socket.on("newAsset", function(data) {
 });
 
 socket.on("assetStateUpdate", function(data) {
-	var assetId = data.split("|")[0];
-	var state = data.split("|")[1];
-
 	var asset = assets().find(function(asset) {
-		return asset.assetId === assetId;
+		return asset.assetId === data.assetId;
 	});
-	asset.state(state);
+	asset.state(data.state);
 });
 
 socket.on("assetDisconnected", function(assetId) {
@@ -179,6 +180,15 @@ socket.on("removedMapping", function(data) {
 	}
 });
 
+// ALERTS
+socket.on("errorMessage", function(data) {
+	data.messages.forEach(function(message) {
+		alerts.push(message);
+	});
+});
+
+
+// This shizzle should change
 socket.on("stickExtremesReport", function(msg) {
 	$('#xMin').text(msg.x.min);
 	$('#yMin').text(msg.y.min);

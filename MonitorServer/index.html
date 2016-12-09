@@ -8,6 +8,12 @@
 	<body>
 		<div class="container">
 
+			<div data-bind="foreach:alerts">
+
+				<div class="alert alert-danger" role="alert">
+					<button type="button" class="close" aria-label="Close"><span aria-hidden="true" data-bind="click:closeAlert">&times;</span></button><span data-bind="text:$data"></span></div>
+			</div>
+
 			<h1>Games</h1>
 
 			<div data-bind="foreach:games">
@@ -86,7 +92,6 @@
 			<ul data-bind="foreach:joysticks">
 				<li>
 					<span data-bind="text:name"></span>
-					<button class="btn btn-default" data-bind="click:monitorJoystick">Monitor joystick</button>
 				</li>
 			</ul>
 
