@@ -5,17 +5,19 @@ var Firmata = require("firmata");
 var EtherPortClient = require("etherport-client").EtherPortClient;
 var five = require("johnny-five");
 
-var MapperCentral = require('./MapperCentral');
 var MonitorServer = require('./MonitorServer');
-var JoystickManager = require('./JoystickManager');
-var RobotManager = require('./RobotManager');
-var AssetManager = require('./AssetManager');
-var GameManager = require('./GameManager');
-var PlayerManager = require('./PlayerManager');
-var ZumoBot = require("./zumoBot");
+
+var MapperRepo = require('./Mapping/MappingRepository');
+var JoystickRepo = require('./Joystick/JoystickRepository');
+var RobotRepo = require('./Robot/RobotRepository');
+var AssetRepo = require('./Asset/AssetRepository');
+var GameRepo = require('./Game/GameRepository');
+var PlayerRepo = require('./Player/PlayerRepository');
+
 var TankBot = require("./TankBot");
 var ZumoJohnnyEsp = require("./ZumoJohnnyEsp");
 var ZumoJohnnyDirect = require("./ZumoJohnnyDirect");
+
 //var AtariJoystick = require("./AtariJoystick");
 //var Ps3Joystick = require("./ps3Joystick");
 var NunchukJoystick = require('./NunchukJoystick');
@@ -31,24 +33,14 @@ config.ports = config.json.ports.map(function(configEntry) {
       port: 3030
     }));
     configEntry.timeout = 1e5;
-
     return configEntry;
   } else {
     return configEntry;
   }
 });
 
-/*
-var robots = [];
-var joysticks = [];
-*/
-
-var joystickManager, robotManager;
+var joystickRepo, robotRepo, mappingRepo, assetRepo, playerRepo, gameRepo;
 var monitor;
-var mapperRepo;
-var assetManager;
-var playerManager;
-var gameManager;
 
 initRobotManager()
   .then(initJoystickManager)
