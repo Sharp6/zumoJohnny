@@ -61,22 +61,20 @@ var dpadMove = function(state) {
 	var leftMotorSpeed = 0;
 	var rightMotorSpeed = 0;
 
+	console.log("DPADMOVE", state)
+
 	if(state.up === "on") {
 		leftMotorSpeed += 255;
 		rightMotorSpeed += 255;
-	}
-
-	if(state.up === "down") {
+	} else if(state.down === "on") {
 		leftMotorSpeed -= 255;
 		rightMotorSpeed -= 255;
 	}
 
-	if(state.up === "left") {
+	if(state.left === "on") {
 		leftMotorSpeed -= 255;
 		rightMotorSpeed += 255;
-	}
-
-	if(state.up === "right") {
+	} else if(state.right === "on") {
 		leftMotorSpeed += 255;
 		rightMotorSpeed -= 255;
 	}
