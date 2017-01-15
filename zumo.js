@@ -21,7 +21,9 @@ var ZumoJohnnyDirect = require("./ZumoJohnnyDirect");
 //var AtariJoystick = require("./AtariJoystick");
 //var Ps3Joystick = require("./ps3Joystick");
 var NunchukJoystick = require('./NunchukJoystick');
+var WiiJoystick = require('./WiiJoystick');
 var AnalogJoystick = require("./AnalogJoystick");
+var DigitalJoystick = require("./DigitalJoystick");
 
 var config = {};
 config.json = JSON.parse(fs.readFileSync('./zumoConfig.json').toString());
@@ -45,6 +47,7 @@ var monitor;
 initRobotRepo()
   .then(initJoystickRepo)
   .then(initBoards)
+  .then(initIpcs)
   .then(initAssetRepo)
   .then(initPlayerRepo)
   .then(initGameRepo)
@@ -82,6 +85,12 @@ function initBoards() {
       this.each(assignBoard);
       resolve();
     });
+  });
+}
+
+function initIpcs() {
+  return new Promise(function(resolve,reject) {
+    joystickRepo.addJoystick(new DigitalJoystick("WiiMote", new WiiJoystick()));
   });
 }
 
