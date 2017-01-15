@@ -23,6 +23,8 @@ var WiiJoystick = function() {
   pythonClient.stdout.on('data', function(data) {
     console.log('py', data.toString());
   });
+
+  pythonClient.unref();
 };
 
 WiiJoystick.prototype = Object.create(require('events').EventEmitter.prototype);

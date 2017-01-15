@@ -91,6 +91,7 @@ function initBoards() {
 function initIpcs() {
   return new Promise(function(resolve,reject) {
     joystickRepo.addJoystick(new DigitalJoystick("WiiMote", new WiiJoystick()));
+    resolve();
   });
 }
 
