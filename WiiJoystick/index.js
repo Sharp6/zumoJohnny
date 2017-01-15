@@ -21,8 +21,16 @@ var WiiJoystick = function() {
   var pythonClient = spawn('python', ['./wii_remote_zj.py']);
 
   pythonClient.stdout.on('data', function(data) {
-    console.log('py', data.toString());
+    console.log('py stdout', data.toString());
   });
+
+	pythonClient.stderr.on('data', function(data) {
+    console.log('py stderr', data.toString());
+  });
+
+	pythonClient.on('close', function(code) {
+		console.log("Python closed with code", code);
+	});
 
   pythonClient.unref();
 };
