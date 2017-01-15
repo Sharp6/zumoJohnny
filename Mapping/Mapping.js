@@ -1,7 +1,7 @@
 "use strict";
 
 function Mapping(zumo, analogJoystick, mappingType) {
-	console.log("MapperCentral: Doing the mapping!");
+	console.log("MapperCentral: Doing the mapping!", mappingType);
 
 	var stickMove = mappingType.stickMove;
 	var fireButton = mappingType.fireButton;

@@ -111,5 +111,6 @@ var fireButton = function(state) {
 module.exports = {
 	stickMove: stickMove,
 	expoStickMove: expoStickMove,
+	dpadMove: dpadMove,
 	fireButton: fireButton
 }
