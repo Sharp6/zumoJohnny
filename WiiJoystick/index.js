@@ -12,13 +12,13 @@ var WiiJoystick = function() {
      "d": "off"
    }
 
-   var btnState = btnStates[data.substring(0,1)];
-   var button = data.substring(1);
-
+   var btnState = btnStates[command.substring(0,1)];
+   var button = command.substring(1);
+   console.log("WII EMITIING", button, btnState);
    this.emit(button, btnState);
   }.bind(this));
 
-  var pythonClient = spawn('python', ['./wii_remote_zj.py']);
+  var pythonClient = spawn('python', ['WiiJoystick/wii_remote_zj.py']);
 
   pythonClient.stdout.on('data', function(data) {
     console.log('py stdout', data.toString());
