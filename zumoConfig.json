@@ -1,6 +1,9 @@
 {
 	"ports": [
-		
+	{
+		"id": "zumoBoard",
+		"port": "/dev/ttyUSB0"
+	}	
 		],
 
 	"unused": [{

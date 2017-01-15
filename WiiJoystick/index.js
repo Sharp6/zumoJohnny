@@ -1,4 +1,4 @@
-var ss = require("../zumoJohnny/socketServer");
+var ss = require("../socketServer");
 var exec = require('child_process').exec;
 
 var WiiJoystick = function() {
