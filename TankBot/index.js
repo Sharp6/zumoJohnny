@@ -34,7 +34,7 @@ var TankBot = function(driver) {
 	};
 
 	var leftDirect = function(mSpeed) {
-		console.log("ZUMODRIVER: DRIVING LEFT");
+		//console.log("ZUMODRIVER: DRIVING LEFT");
 		if(mSpeed > 0) {
 			motors.rightMotor.reverse(mSpeed);
 		} else {
@@ -43,7 +43,7 @@ var TankBot = function(driver) {
 	};
 
 	var rightDirect = function(mSpeed) {
-		console.log("ZUMODRIVER: DRIVING RIGHT");
+		//console.log("ZUMODRIVER: DRIVING RIGHT");
 		if(mSpeed > 0) {
 			motors.leftMotor.reverse(Math.abs(mSpeed));
 		} else {
