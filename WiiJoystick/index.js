@@ -1,5 +1,5 @@
 var ss = require("../socketServer");
-var exec = require('child_process').exec;
+var spawn = require('child_process').spawn;
 
 var WiiJoystick = function() {
 	console.log("Hello, I'm WiiMote.");
@@ -18,7 +18,7 @@ var WiiJoystick = function() {
    this.emit(button, btnState);
   }.bind(this));
 
-  var pythonClient = exec('python ./wii_remote_zj.py');
+  var pythonClient = spawn('python', ['./wii_remote_zj.py']);
 
   pythonClient.stdout.on('data', function(data) {
     console.log('py', data.toString());
