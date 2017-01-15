@@ -7,7 +7,7 @@ var five = require("johnny-five");
 
 var MonitorServer = require('./MonitorServer');
 
-var MapperRepo = require('./Mapping/MappingRepository');
+var MappingRepo = require('./Mapping/MappingRepository');
 var JoystickRepo = require('./Joystick/JoystickRepository');
 var RobotRepo = require('./Robot/RobotRepository');
 var AssetRepo = require('./Asset/AssetRepository');
@@ -42,12 +42,12 @@ config.ports = config.json.ports.map(function(configEntry) {
 var joystickRepo, robotRepo, mappingRepo, assetRepo, playerRepo, gameRepo;
 var monitor;
 
-initRobotManager()
-  .then(initJoystickManager)
+initRobotRepo()
+  .then(initJoystickRepo)
   .then(initBoards)
-  .then(initAssetManager)
-  .then(initPlayerManager)
-  .then(initGameManager)
+  .then(initAssetRepo)
+  .then(initPlayerRepo)
+  .then(initGameRepo)
   .then(initMapper)
   .then(initMonitor)
   .then(function() {
@@ -66,13 +66,13 @@ function initBoards() {
       if(boardType === "zumo") {
         //robot = new ZumoBot(board, five);
         //robots.push(new ZumoBot(board.id, board, five));
-        robotManager.addRobot(new TankBot(new ZumoJohnnyDirect(board.id, board, five)));
+        robotRepo.addRobot(new TankBot(new ZumoJohnnyDirect(board.id, board, five)));
         console.log("Robot is ready");
       } else if (boardType === "zumoEsp") {
-        robotManager.addRobot(new TankBot(new ZumoJohnnyEsp(board.id, board, five)));
+        robotRepo.addRobot(new TankBot(new ZumoJohnnyEsp(board.id, board, five)));
         console.log("ESP ZUMO BOT is ready");
       } else if (boardType === "nunchuk") {
-        joystickManager.addJoystick(new AnalogJoystick(board.id, new NunchukJoystick(board, five)));
+        joystickRepo.addJoystick(new AnalogJoystick(board.id, new NunchukJoystick(board, five)));
         console.log("Joystick has been initted.");
       }
     }
@@ -85,51 +85,51 @@ function initBoards() {
   });
 }
 
-function initJoystickManager(){
+function initJoystickRepo(){
   return new Promise(function(resolve,reject) {
-    joystickManager = new JoystickManager();
+    joystickRepo = new JoystickRepo();
     resolve();
   });
 }
 
-function initRobotManager(){
+function initRobotRepo(){
   return new Promise(function(resolve,reject) {
-    robotManager = new RobotManager();
+    robotRepo = new RobotRepo();
     resolve();
   });
 }
 
 function initMonitor() {
   return new Promise(function(resolve,reject) {
-    monitor = new MonitorServer({ robotManager: robotManager, joystickManager: joystickManager, assetManager: assetManager, gameManager: gameManager, playerManager: playerManager, mapperRepository: mapperRepo });
+    monitor = new MonitorServer({ robotRepo: robotRepo, joystickRepo: joystickRepo, assetRepo: assetRepo, gameRepo: gameRepo, playerRepo: playerRepo, mappingRepo: mappingRepo });
     resolve();
   });
 }
 
 function initMapper() {
   return new Promise(function(resolve,reject) {
-    mapperRepo = new MapperCentral(joystickManager, robotManager);
+    mappingRepo = new MappingRepo(joystickRepo, robotRepo);
     resolve();
   });
 }
 
-function initAssetManager() {
+function initAssetRepo() {
   return new Promise(function(resolve,reject) {
-    assetManager = new AssetManager();
+    assetRepo = new AssetRepo();
     resolve();
   });
 }
 
-function initGameManager() {
+function initGameRepo() {
   return new Promise(function(resolve,reject) {
-    gameManager = new GameManager();
+    gameRepo = new GameRepo();
     resolve();
   });
 }
 
-function initPlayerManager() {
+function initPlayerRepo() {
   return new Promise(function(resolve,reject) {
-    playerManager = new PlayerManager();
+    playerRepo = new PlayerRepo();
     resolve();
   });
 }

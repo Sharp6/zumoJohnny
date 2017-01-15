@@ -13,6 +13,11 @@ var MappingTypeRepo = function() {
 			name: "Analog to Tank Exponential",
 			stickMove: functions.expoStickMove,
 			fireButton: functions.fireButton
+		},
+		{
+			name: "Digital to Tank",
+			stickMove: functions.dpadMove,
+			fireButton: functions.fireButton
 		}
 	];
 

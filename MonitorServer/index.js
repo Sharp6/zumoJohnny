@@ -1,5 +1,5 @@
 "use strict";
-var MonitorServer = function(managers) {
+var MonitorServer = function(repositories) {
 	var express = require('express');
 	var path = require('path');
 	var app = express();
@@ -12,19 +12,19 @@ var MonitorServer = function(managers) {
 
 	var handlers = {
 		requestMapping: function(data) {
-			managers.mapperRepository.requestMapping({ joystickName: data.joystick, robotName: data.robot, mappingType:data.mappingType });
+			repositories.mappingRepo.requestMapping({ joystickName: data.joystick, robotName: data.robot, mappingType:data.mappingType });
 		},
 		requestMapRemoval: function(data) {
-			managers.mapperRepository.requestMapRemoval({ name: data.name });
+			repositories.mappingRepo.requestMapRemoval({ name: data.name });
 		},
 		createGame: function(data, socket) {
 			// Get player objects
 			var players = data.players.map(function(player) {
-				return managers.playerManager.getPlayerFor(player.name);
+				return repositories.playerRepo.getPlayerFor(player.name);
 			});
 			// Get asset objects
 			var assets = data.assets.map(function(asset) {
-				return managers.assetManager.getAssetFor(asset.assetId);
+				return repositories.assetRepo.getAssetFor(asset.assetId);
 			});
 
 			var errors = [];
@@ -36,21 +36,21 @@ var MonitorServer = function(managers) {
 			}
 
 			if(errors.length === 0) {
-				managers.gameManager.createGame({name: data.name, numberOfChallenges: data.numberOfChallenges, players: players, assets: assets });
+				repositories.gameRepo.createGame({name: data.name, numberOfChallenges: data.numberOfChallenges, players: players, assets: assets });
 			} else {
 				socket.emit("errorMessage", { messages: errors });
 			}
 		},
 		startGame: function(data, socket) {
-			var game = managers.gameManager.getGameFor(data.gameName);
+			var game = repositories.gameRepo.getGameFor(data.gameName);
 			game.startGame();
 		},
 		createPlayer: function(data, socket) {
-			managers.playerManager.createPlayer(data);
+			repositories.playerRepo.createPlayer(data);
 		}
 	};
 
-	managers.gameManager.on("newGame", function(game) {
+	repositories.gameRepo.on("newGame", function(game) {
 		io.emit("newGame", game);
 
 		game.on("gameStateChange", function(state) {
@@ -71,11 +71,11 @@ var MonitorServer = function(managers) {
 		});
 	});
 
-	managers.playerManager.on("newPlayer", function(player) {
+	repositories.playerRepo.on("newPlayer", function(player) {
 		io.emit("newPlayer", player);
 	});
 
-	managers.assetManager.on("newAsset", function(asset) {
+	repositories.assetRepo.on("newAsset", function(asset) {
 		console.log("MONITORSERVER got new asset", asset);
 		io.emit("newAsset", asset);
 
@@ -88,24 +88,24 @@ var MonitorServer = function(managers) {
 		});
 	});
 
-	managers.mapperRepository.on("newMapping", function(mapping) {
+	repositories.mappingRepo.on("newMapping", function(mapping) {
 		io.emit("newMapping", mapping);
 	});
 
-	managers.mapperRepository.on("removedMapping", function(mapping) {
+	repositories.mappingRepo.on("removedMapping", function(mapping) {
 		io.emit("removedMapping", mapping);
 	});
 
 	io.on('connection', function(socket){
 		console.log('a user connected');
 
-		socket.emit('robots', { robots: managers.robotManager.robots });
-		socket.emit('joysticks', { joysticks: managers.joystickManager.joysticks });
-		socket.emit('players', { players: managers.playerManager.players });
-		socket.emit('assets', { assets: managers.assetManager.assets });
-    socket.emit('games', { games: managers.gameManager.games });
-    socket.emit('mappings', { mappings: managers.mapperRepository.mappings });
-		socket.emit('mappingTypes', { mappingTypes: managers.mapperRepository.mappingTypeNames });
+		socket.emit('robots', { robots: repositories.robotRepo.robots });
+		socket.emit('joysticks', { joysticks: repositories.joystickRepo.joysticks });
+		socket.emit('players', { players: repositories.playerRepo.players });
+		socket.emit('assets', { assets: repositories.assetRepo.assets });
+    socket.emit('games', { games: repositories.gameRepo.games });
+    socket.emit('mappings', { mappings: repositories.mappingRepo.mappings });
+		socket.emit('mappingTypes', { mappingTypes: repositories.mappingRepo.mappingTypeNames });
 
 		socket.on('clientEvent', function(data) {
 			if(data.action && handlers[data.action]) {
