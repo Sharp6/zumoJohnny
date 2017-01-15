@@ -10,10 +10,10 @@ function startServer(callback) {
 	        ipc.server.on(
 	            'data', callback
 	        );
-	        console.log("Socket server is listening.");
+	        console.log("Socket server is listening on id", ipc.config.id, ".");
 	    }
 	);
-	ipc.server.start();	
+	ipc.server.start();
 }
 
 module.exports = startServer;
